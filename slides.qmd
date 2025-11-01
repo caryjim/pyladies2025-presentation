@@ -1,8 +1,8 @@
 ---
 author: "Cary K. Jim, Ph.D." 
-title: "Stratified Sampling with Python"
-subtitle: "PyLadies 2025 Presentation"
-date: "10.22.2025"
+title: "Stratified Sampling in Survey Research with Python"
+subtitle: "PyLadiesCon 2025"
+date: "Dec 2025"
 
 format:
     revealjs:
@@ -13,25 +13,29 @@ jupyter: python3
 ---
 
 ::: notes
-Submission Details
+**Abstract:** Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios.
 
-Abstract (300 words): This talk introduces stratified sampling as a powerful technique for ensuring representative data subsets, especially in the presence of imbalanced groups. We'll explore its practical applications in survey analysis, and demonstrate how Python tools make implementation straightforward. Attendees will gain a clear understanding of when and why to use stratified sampling, along with best practices for applying it effectively in real-world scenarios.
+**Description:** Whether you're conducting surveys, building predictive models, or working with imbalanced datasets, stratified sampling is a powerful technique to ensure your data is representative and your insights are reliable.
 
-Stratified sampling is a powerful technique for ensuring representative data subsets, especially when working with diverse populations. In this talk, I will demonstrate how Python can be used to implement stratified sampling effectively, using a real-world case study from a survey conducted at our college. The survey aimed to understand student experiences and outcomes across a large and diverse student body. To ensure that our sample accurately reflected the population, we stratified by three key variables: age group, demographic category, and gender.
+In survey research, especially within diverse populations like college students, simple random sampling can lead to under-representation of key subgroups. Stratified sampling addresses this by dividing the population into distinct strata (e.g., age groups, majors, demographics) and sampling proportionally from each. This approach reduces sampling bias and improves the reliability of statistical estimates.
 
-This approach allowed us to maintain proportional representation across these strata, reducing sampling bias and improving the reliability of our insights. I will walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and machine learning contexts.
+In this presentation, I will demonstrate how to use Python to implement stratified sampling in a student survey at our college. By maintaining proportional representation across age groups, we ensured that our sample reflected the diversity of the student body. I’ll walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and data analysis.
 
-Description (1000 words): Whether you're conducting surveys, building predictive models, or working with imbalanced datasets, this session will provide practical tools and insights to enhance your sampling strategy. Code examples and visualizations will be shared to support hands-on learning, and the talk will conclude with tips, pitfalls to avoid, and a brief Q&A.
-
--   Other resources: https://qmd4sci.njtierney.com/
--   Quarto and VS Code: https://quarto.org/docs/tools/vscode/index.html
+We’ll also explore how to calculate weighted means when sample proportions differ from population proportions, which is a crucial step in producing unbiased estimates. Code examples and visualizations will be shared via GitHub to support hands-on learning and reproducibility.
 :::
 
 # Introduction
 
-When there is a large population to study, it is impossible to survey everyone because in reality we are always limited by time, budget, or other resources. Often, the use of simple random sampling may comes to mind (i.e., draw any random sample), and this may not be the best approach if you want to be able to apply the results back to the large population. In this scenario, the use of stratified sampling to ensure that subgroups within a population are adequately represented in the sample is important. This method can reduce sampling bias/errors, and improve the precision of estimates. It is also more efficient than simple random sampling for heterogeneous populations.
+## Learning Outcomes: {.smaller .scrollable}
 
-::: notes
+1.  Understand when to use stratified sampling over random sampling
+
+2.  Learn how to define subgroups (strata) and implement sampling in Python
+
+3.  Evaluate sample representativeness by checking distribution patterns
+
+4.  Apply weights to adjust for unequal proportions in score estimation
+
 **Assumptions of the audience**
 
 -   Some familiarity with descriptive statistics and sampling frameworks
@@ -39,100 +43,107 @@ When there is a large population to study, it is impossible to survey everyone b
 -   Basic understanding of Python programming language
 
 -   Interest in data analysis and research methodologies
+
+Today's presentation uses **stratified random sampling** to identify subgroups proportional to the student population in one semester.
+
+## What is Stratified Sampling and Its Application?
+
+::: notes
+When there is a large population to study, it is impossible to survey everyone because in reality we are always limited by time, budget, or other resources. The use of simple random sampling may comes to mind, and depends on your research objectives, this method may not be the best approach if you want to be able to apply the results to inform programs, policies, or other initiatives. Last, designing research with stratification allows for analysis of differences across key demographic or behavioral segments. In sum, stratified sampling can reduce sampling bias/errors, and improve the precision of estimates. It is also more efficient than simple random sampling for heterogeneous populations.
 :::
 
-# What is Stratified Sampling and Its Application?
+-   Challenges in surveying large populations
 
-## Application of Stratified Sampling in Various Fields:
+-   Aligning research outcomes with actionable goals
 
--   Market research: Understanding customer preferences across different demographics (User segmentation)
--   Public health: Estimating disease prevalence in different age groups (Epidemiological studies)
--   Education: Assessing student performance across different characteristics (Educational assessments)
--   Experimental research: Ensuring balanced representation of treatment groups (Clinical trials)
+-   Enhancing insight discovery through subgroup analysis
 
 ## Stratified Sampling Overview {.smaller}
 
-Stratified sampling is a design method that involves dividing a population into smaller subgroups known as strata.
+Stratified sampling is a research design method that involves dividing a population into smaller subgroups known as strata.
 
--   The strata are formed based on the members' shared attributes or characteristics (e.g., age group, gender, geographic location).
+-   Strata are formed based on shared attributes or characteristics (e.g., age group, gender, geographic location).
 
--   Then, a selection approach is used to draw the sample, such as random, systematic, or convenience sampling.
+-   A sampling technique, such as random, systematic, or convenience sampling, is then applied to select participants in each stratum.
 
-1.  📘Example: - Systematic sampling with strata: You divided a college students population based on their major and then select every *k*th element based on your the size needed from each stratum.
+📘 Example
 
-2.  📘Example: - Stratified random sampling: You divided a college students population based on their major and then randomly select a proportionate number of students from each major.
+1.  Systematic sampling with strata: You divided a college students population based on their major and then select every *k*th element based on your the size needed from each stratum.
 
-# Stratified Random Sampling (Today's Focus)
+2.  Stratified random sampling: You divided a college students population based on their major and then randomly select a proportionate number of students from each major.
 
-Start with the population dataset and identify the variables you use for stratification (variables should be distinct, non-overlapping groups).
+# Today's Topic: Stratified Random Sampling
 
-Determine the sample size (total observations) you need for your study. We will use proportional allocation in today's demo, in which the proportion of each stratum in the sample is the same as the proportion of each stratum in the population. There are other approaches too, such as optimal allocation, where you may increase a proportion of a specific strata if that is important to your study/research.
+## Procedures {.smaller}
 
-The final step is to select the random samples from each stratum by the proportions and then combine the samples from all strata to form the final sample group.
+-   Start with the population dataset and identify the variables for stratification. The variables should be distinct, non-overlapping groups, e.g., Age, Gender, Race.
+
+-   Determine the required sample size (i.e., total observations) you need for your study.
+
+    -   We will use proportional allocation today where each stratum's representation matches to its proportion in the population.
+
+    -   Another approach is optimal allocation, which increase the sample size for a specific strata that is important to the research.
+
+-   Select the random samples from each stratum and combine all strata to form the complete sample group.
 
 ## Implementation Steps with Python
 
 1.  Define the population and identify relevant strata and its proportions.
-2.  Determine the sample size for each stratum based on its proportion in the population.
-3.  Randomly select samples by proportions for each stratum from the population.
-4.  Combine the samples from all strata to form the final sample.
+2.  Determine the sample size for each stratum based on its proportion in the overall population.
+3.  Randomly select samples by each stratum according to the calculated proportions.
+4.  Combine the selected samples from all strata to form the final sample group.
+5.  Examine the sample distribution and adjust strata definitions if needed.
 
 ::: notes
-The dataset used in this presentation is a replication from a survey I've conducted in my work. I choose a few key demographic variables such as race, ethnicity, age group, and gender to illustrate the process and how we make decision in a study. I've generated a synthetic dataset for today's demonstration. The complete set of codes can be found in the GitHub repository linked in the presentation.
+**About the Dataset:**
+
+The participant dataset used in this presentation is synthetic, modeled after a realistic student population in a small college. It was created specifically for demonstration purposes. To illustrate the stratified sampling process and decision-making involved in research design, I selected a few key demographic variables: **race, age/age group, and gender** and will discuss more in-depth in today's presentation. The full dataset and code are available in the GitHub repository linked at the end of the presentation.
 :::
 
-## Step 1: Define Population and Strata {.smaller}
+## Step 1: Identify the strata and its proportions {.smaller .scrollable}
 
-First, we need to assess the distribution of the strata in the population. In this example, we know there are 4 categorical variables: Race, ethnicity, and gender and 2 numerical variables: Age and Overall GPA. Because we have multiple variables, we need to do some re-coding to create strata that make sense for our analysis. It is because each stratum will be used in weight calculation later on when we analyze the survey results.
+In this example, the population is defined as 25,000 college students.
 
-**Student Population at College X:** 25,000
+**Variables in the population dataset:**
 
-(add a diagram)
+```{python}
+# Hide this code chunk in the presentation
+#| echo: false
+import pandas as pd
+population_data = pd.read_csv("synthetic_students.csv")
+```
 
-## Categorical Variables Summary {.scrollable .smaller}
+```{python}
+population_data.head()
+```
 
-**Table 1. Categorical variables and proportion of each group**
+-   Four categorical variables: gender, race, ethnicity, and student type
 
-| Gender | Race | Ethnicity | Student Type |
-|------------------|-------------------|------------------|------------------|
-| Female (56%) | Asian (10%) | Hispanic or Latino (25%) | Freshman (29%) |
-| Male (42%) | American Indian or Alaska Native (3%) | Not Hispanic or Latino (75%) | Sophmore (19%) |
-| Non-Binary (1%) | Black or African American (19%) | Unknown (0%) | Junior (18%) |
-| Unknown (1%) | Native Hawaiian or Other Pacific Islander (3%) |  | Senior (23%) |
-|  | White (55%) |  | Continuing Education (1%) |
-|  | Two or more races (7%) |  |  |
-|  | Unknown (3%) |  |  |
+-   Two numerical variables: age and overall GPA
 
-: *Note.* Unknown is used for missing data or prefer not to answer during data collection.
+-   Select the most relevant variables and some re-coding would be necessary
 
-## Numerical Variables Summary {.scrollable .smaller}
+    -   Race and gender
 
-**Table 2. Numerical variables and distribution of values**
+    -   Re-code age to Age Group
 
-|           | Age    | Overall GPA |
-|-----------|--------|-------------|
-| **Count** | 25,000 | 25,000      |
-| **Mean**  | 19.63  | 2.81        |
-| **Min**   | 17     | 0           |
-| **Max**   | 44     | 4.0         |
-| **Std**   | 2.82   | 1.02        |
-| **25%**   | 18     | 2.68        |
-| **50%**   | 19     | 3.12        |
-| **75%**   | 20     | 3.39        |
+::: notes
+Notes: We begin by defining our population—25,000 college students in this example. Next, we assess the distribution of potential strata in the dataset. The dataset includes three categorical variables: race, ethnicity, and gender, and two numerical variables: age and overall GPA. Since we’re working with multiple variables, we need to re-code some of them to create meaningful strata. This helps ensure that the strata are both analytically useful and aligned with the research objectives. At this stage, we also decide which variables are most relevant to our study. Not all variables may be necessary, so we focus on those that best support our research goals. This step is crucial because each stratum will be used in weight calculations during analysis. It also becomes especially important when the final respondent group doesn’t perfectly reflect the population structure, allowing us to adjust and maintain representativeness.
+:::
 
-## Step 2. Determine the sample size for each stratum
+## Step 2. Determine the sample size and proportions of each subgroup {.smaller}
 
-### 2.1 Cochran's Sample Size Formula
+**2.1 Cochran's Sample Size**
 
-There are many methods to determine sample size. The most common method we use in educational measurement is Cochran's Sample Size Formula.
+Commonly use method is survey research or studies in educational settings
 
-There are two steps in this process:
+**There are two steps in this process:**
 
--   Apply the ideal sample size formula with a set of parameters for a desired level of precision.
+1.  Apply Cochran's ideal sample size formula with a set of parameters for a desired level of precision.
 
--   Use the obtained ideal sample size value in the modified formula for finite population (i.e., The student population size is known) to get the adjusted sample size.
+2.  Use the obtained ideal sample size value in the modified formula for finite population (i.e., The student population size is known) to get the adjusted sample size.
 
-## Cochran's Sample Size Formula {.smaller .scrollable}
+## Cochran's sample size formula {.smaller .scrollable}
 
 The ideal sample size for an infinite population is given by: $$
 n_0 = \frac{Z^2 \, p \, (1 - p)}{e^2}
@@ -151,84 +162,199 @@ $$ where:
 -   ( n~0~ ) = theoretical sample value obtained from Cochran’s formula for an infinite population
 -   ( N ) = population size
 
-## Code Example: Cochran's Sample Size Calculation {.smaller}
+## 2.2 Code example: Cochran's sample size calculation {.smaller .scrollable}
 
 ```{python}
 #| echo: true
 
+# Cochran's Sample Size Calculation
 import scipy.stats as stats
 def cochran_sample_size(Z, p, e, N):
+    """
+    Calculate the required sample size using Cochran's formula, adjusted for a finite population.
+
+    Parameters:
+        Z (float): Z-value (e.g., 1.96 for 95% confidence level)
+Z = stats.norm.ppf(0.975)   # Z-score for the upper tail of a two-tailed 95% confidence interval (1.96 for 95% confidence)
+        e (float): Margin of error (e.g., 0.05 for 5%)
+        N (int): Population size
+
+    Returns:
+        int: Adjusted sample size for the finite population
+    """
     n0 = (Z**2 * p * (1 - p)) / (e**2)
     n = n0 / (1 + ((n0 - 1) / N))
     return int(n)
+
 # Parameters
-Z = stats.norm.ppf(0.975)  # 95% confidence level (i.e., 1.96)
-p = 0.5                     # Estimated proportion
-e = 0.05                    # Margin of error
-N = 25000                   # Student Population size (in this example)
+Z = stats.norm.ppf(0.975)   # Calculate the critical z-value for a 95% confidence level in a standard normal distribution
+p = 0.5                     # Estimated proportion (use 0.5 for maximum variability, sort of like worst-case scenario)
+e = 0.05                    # Margin of error (precision level, more precision requires larger sample size)
+N = 25000                   # Finite population size (in this example, student population size)
+
 # Calculate sample size
-sample_size = cochran_sample_size(Z, p, e, N)
-print(f"Calculated sample size: {sample_size}")
+
+# Calculate n0 and adjusted sample size for finite population
+n0 = (Z**2 * p * (1 - p)) / (e**2)
+sample_size = n0 / (1 + ((n0 - 1) / N))
+print(f"Ideal sample size (n0): {round(n0)}")
+print(f"Adjusted sample size for finite population: {int(sample_size)}")
+
 ```
 
-Now that we have obtained the sample size value adjusted for the finite population. We can then apply this to determine how many person we need from each subgroup (strata). A proportion of each group was established in a previous step, and now we need to do a few more calculation and then apply random selection to get the final sample for the study.
+The result from the code above shows that the ideal sample size for an infinite population is 384, and the adjusted sample size for our finite population of 25,000 students is 378. Next, we will use this adjusted sample size to determine how many students we need from each subgroup (strata) in the population.
 
-## Stratified Random Sample Groups
+::: notes
+In this slide, we’re introducing Cochran’s Sample Size Formula, a widely used method in educational and survey research to determine how many participants are needed for statistically valid results. We start with the ideal sample size formula for an infinite population. This formula uses three key parameters:
 
-It is decided that three of the demographic background will be meaningful for the study: Gender, Race, and Age Group. Since age is collected as a numerical variable and it has not be categorized, we will have to re-group the values to form a new variable as "Age Group".
+Z-value, which corresponds to the desired confidence level (e.g., 1.96 for 95% confidence), p, the estimated proportion of the population with the attribute of interest (we often use 0.5 to account for maximum variability), and e, the margin of error we’re willing to accept (commonly 0.05 for 5%).
 
-Note. You may be wondering why, and the reason is when we are using the stratified method, each level within a group is a part of a combination. For example, if I have 2 levels for Gender, and then 5 levels for Race, I'm really looking at 10 different ways of the combination between gender and race. If your finite population is not big enough, technically, you will not be able to stratified meaningfully to account for all the different combination and have a decent sample size group to survey.
+Once we calculate the ideal sample size, we adjust it for a finite population—in our case, 25,000 college students—using a modified formula. This ensures our sample size is appropriate for the actual population size. The Python code example demonstrates how to implement this calculation programmatically. It uses the scipy.stats library to compute the Z-value and then applies both formulas to get the ideal and adjusted sample sizes. This process helps ensure that our survey results are both accurate and representative of the population we’re studying.
+:::
 
-## Code Example: Stratified Random Selection
+## Re-code Age to Age Group {.smaller}
 
-Because we have a defined group of students in a roster, I can then apply the method directly on the dataset to first pulled the proportion of each subgroup and then randomly select the number of students needed.
+**2.3 Code example: Grouping age by increments of 2 or 10 {.smaller}**
 
-\<insert graph\>
+```{python}
+#| echo: true
+# Recode Age to Age Group
+population_data['Age_Group'] = pd.cut(population_data['Age'], 
+                                       bins=[16, 19, 21, 23, 25, 27, 29, 31, 41, 51, 61, 81],
+                                       labels=['16-18', '19-20', '21-22', '23-24', '25-26', '27-28', '29-30', '31-40', '41-50', '51-60', '61-80'],
+                                   right=False)
+population_data[['Age', 'Age_Group']].head(10)
+
+# Age group distribution
+population_data['Age_Group'].value_counts().sort_index()
+```
+
+::: notes
+In this step, we re-code the age variable into categorical age groups using pandas' `cut` function and we used the increments of 2. However, this grouping is a bit problematic because the age are skewed to the younger age groups. We have to re-do the categorization to make it more useful for stratified sampling.
+
+Now. You may be wondering why, and the reason is when we are using the stratified method, each level within a group is a part of a combination. For example, if I have 2 levels for Gender, and then 5 levels for Race, I'm really looking at 10 different ways of the combination between gender and race. If your finite population is not big enough, technically, you will not be able to stratified meaningfully to account for all the different combination and have a decent sample size group to survey.
+:::
+
+**2.4 Code example: Grouping age by intended age range {.smaller}**
+
+```{python}
+# In previous conversion, any groups beyond the age of 40 is really small, and the population size for age 23 or above is much smaller by proportion to the younger age groups.
+
+# Therefore, we can further combine age 23 to 30 into one group, and then combine age 31 and above into a single category, called '31+'.
+
+# Ensure Age_Group is categorical and handle NaNs
+if not pd.api.types.is_categorical_dtype(population_data['Age_Group']):
+    population_data['Age_Group'] = population_data['Age_Group'].astype('category')
+
+# Remove unused categories and add any missing ones to avoid errors
+population_data['Age_Group'] = population_data['Age_Group'].cat.remove_unused_categories()
+new_categories = {
+    '23-24': '23-30',
+    '25-26': '23-30',
+    '27-28': '23-30',
+    '29-30': '23-30',
+    '31-40': '31+',
+    '41-50': '31+',
+    '51-60': '31+',
+    '61-80': '31+'
+}
+# Add any missing categories to avoid ValueError
+missing_cats = set(new_categories.keys()) - set(population_data['Age_Group'].cat.categories)
+if missing_cats:
+    population_data['Age_Group'] = population_data['Age_Group'].cat.add_categories(list(missing_cats))
+
+population_data['Age_Group'] = population_data['Age_Group'].replace(new_categories)
+population_data['Age_Group'].value_counts().sort_index()
+```
+
+This time the levels in the age group is more appropriate and have a decent count at each level. Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.
+
+## Step 3: Select random samples by each stratum by the calculated proportions {.smaller .scrollable}
 
 The strata (subgroups) are determined by the following categories:
 
-·         Gender (Female or Male)
+-   Gender (Female or Male)
 
-·         Race (American Indian/Alaska Native, Asian, Black/African American, Native Hawaiian/Pacific Islander, White, Multiracial, Unknown)
+-   Race (Asian, Black or African American, White, Two or more races, Other)
 
-·         Age Group (18-24, 25 or above)
+-   Age Group (16-18, 19-20, 21-22, 23-30, 31+)
 
-This is to ensure that all relevant subgroups are adequately represented. The ethnicity and overall GPA categories were not included in sampling because it would create too many strata and there will not be enough samples by strata to make meaningful inferences. However, we kept that categorical information as background variables that can be used when reviewing the survey results. Then, we applied proportionate sampling from each subgroup that reflects the student population. Each student was picked randomly in the R script.
+Note. You can review the jupyter notebook in the GitHub Repo that shows the iteration of determine the proportion of each stratum.
 
-**Data Analysis**
+## 3.1 Code example: Caculate proportions and apply it to select stratum {.smaller .scrollable} 
 
-Weighting techniques are applied to help correct imbalances and improve the reliability of the results due to low response rate (3%).
+```{python}
+#| echo: true
+# Calculate proportions for each stratum
+strata_counts = population_data.groupby(['Gender', 'Race', 'Age_Group']).size()
+strata_proportions = strata_counts / len(population_data)
+strata_proportions = strata_proportions.reset_index(name='Proportion')
+strata_proportions.head()
+# Sample size for each stratum
+total_sample_size = 378  # From Cochran's calculation
+strata_proportions['Sample_Size'] = (strata_proportions['Proportion'] * total_sample_size).round().astype(int)
+strata_proportions.head()
+```
 
-**Post-Stratification Weights Calculation**
+## Step 4. Apply random selection by each strata and form the completed sample dataset {.smaller .scrollable}
 
-Weight for each demographic characteristic can be calculated by using the proportion of each category from the sample population and the proportion of each category from the respondent population.
+```{python}
+#| echo: true
+# Randomly select samples from each stratum
+sampled_data = pd.DataFrame()
+for _, row in strata_proportions.iterrows():
+    stratum = population_data[
+        (population_data['Gender'] == row['Gender']) &
+        (population_data['Race'] == row['Race']) &
+        (population_data['Age_Group'] == row['Age_Group'])
+    ]
+    sampled_stratum = stratum.sample(n=row['Sample_Size'], replace=True)
+    sampled_data = pd.concat([sampled_data, sampled_stratum])
+sampled_data.reset_index(drop=True, inplace=True)
+sampled_data.head()
+```
 
-In general, the formula for calculating weight for each category is
+## Step 5. Check the proportion of the sampled data to the population data {.smaller .scrollable}
 
-Because of the use of combined categories, each participant was assigned a weight from the following calculation:
+**Sampled Dataset**
 
-Race of sample/respondent\* Age_group of sample/respondents\* gender of sample/respondents
+```{python}
+sampled_stratum_counts = sampled_data.groupby(['Gender', 'Race', 'Age_Group'], observed=True).size().reset_index(name='Count')
+sampled_stratum_counts['Proportion'] = sampled_stratum_counts['Count'] / sampled_stratum_counts['Count'].sum()
+sampled_stratum_counts.head(10)
+```
 
-# Extension
+```{python}
+population_counts = population_data.groupby(['Gender', 'Race', 'Age_Group']).size().reset_index(name='Count')
+population_counts['Proportion'] = population_counts['Count'] / population_counts['Count'].sum()
+population_counts.head(10)
+```
 
-How to handle classification tasks with imbalanced classes using stratified sampling techniques?
+# Weights Calculation
 
-How many to invite? Depending on historical response rate, if its only been 10%, then you have to take the sample size 2000 divided by .10 response rate to see the number you should invite.
+The use of weights is essential when the sample proportions differ from the population proportions. This adjustment helps to correct for any over- or under-representation of certain groups in the sample, ensuring that the analysis reflects the true population structure.
 
-**7. Analyze the Data**
+Depending on the number of stratification variables and their levels, weights can be calculated for each stratum or for combined categories. The formular for calculating weights for combined categories is similar to calculating weights for individual strata, but it takes into account the joint distribution of the combined categories.
 
-Treat the combined sample as representative of the population, but account for stratification when analyzing (especially in weighted estimates or variance calculations).
+\<add formula\>
 
-**5. Common Pitfalls & Tips (2 minutes)**
+# Extension of Stratified Random Sampling
 
--   Small strata sizes
--   Over-stratification
--   When stratification isn’t necessary
+## **Handling Imbalanced Classes in Classification Tasks**
 
-# Technical setup for this presentation
+Use **stratified sampling** to ensure each class is proportionally represented in training and testing datasets
 
-Python 3.13.2 environment with the following packages: - pandas
+-   Prevents bias toward majority classes
 
-Virtual environment: https://quarto.org/docs/projects/virtual-environments.html
+-   improves model performance and generalization
 
-Be sure to use .gitignone to ignore the push/pull of the venv and instead run the requirement.txt file.
+## **Survey Planning with Response Rate Consideration**
+
+Although we designed the sample group of students to survey is within 400, however, we don't often get all 400 results back. Therefore, adjust invitation count based on **expected response rate** can also be implemented.
+
+Example: If desired sample size is **2,000** and historical response rate is **10%**, then:\
+
+Invitations Required=20000\* 10=20,000
+
+
+# GitHub Repo & Contact Me

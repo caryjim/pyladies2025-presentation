@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="slides_files/libs/clipboard/clipboard.min.js"></script>
 <script src="slides_files/libs/quarto-html/tabby.min.js"></script>
 <script src="slides_files/libs/quarto-html/popper.min.js"></script>
 <script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -10,8 +10,8 @@
   <meta name="generator" content="quarto-1.8.25">
 
   <meta name="author" content="Cary K. Jim, Ph.D.">
-  <meta name="dcterms.date" content="2025-10-22">
-  <title>Stratified Sampling with Python</title>
+  <meta name="dcterms.date" content="2025-12-01">
+  <title>Stratified Sampling in Survey Research with Python</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -188,14 +188,17 @@
       margin-right: 0; 
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Stratified Sampling with Python</h1>
-  <p class="subtitle">PyLadies 2025 Presentation</p>
+  <h1 class="title">Stratified Sampling in Survey Research with Python</h1>
+  <p class="subtitle">PyLadiesCon 2025</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -205,20 +208,16 @@ Cary K. Jim, Ph.D.
 </div>
 </div>
 
-  <p class="date">2025-10-22</p>
+  <p class="date">2025-12-01</p>
 </section>
 <section class="slide level2">
 
 <aside class="notes">
-<p>Submission Details</p>
-<p>Abstract (300 words): This talk introduces stratified sampling as a powerful technique for ensuring representative data subsets, especially in the presence of imbalanced groups. We’ll explore its practical applications in survey analysis, and demonstrate how Python tools make implementation straightforward. Attendees will gain a clear understanding of when and why to use stratified sampling, along with best practices for applying it effectively in real-world scenarios.</p>
-<p>Stratified sampling is a powerful technique for ensuring representative data subsets, especially when working with diverse populations. In this talk, I will demonstrate how Python can be used to implement stratified sampling effectively, using a real-world case study from a survey conducted at our college. The survey aimed to understand student experiences and outcomes across a large and diverse student body. To ensure that our sample accurately reflected the population, we stratified by three key variables: age group, demographic category, and gender.</p>
-<p>This approach allowed us to maintain proportional representation across these strata, reducing sampling bias and improving the reliability of our insights. I will walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and machine learning contexts.</p>
-<p>Description (1000 words): Whether you’re conducting surveys, building predictive models, or working with imbalanced datasets, this session will provide practical tools and insights to enhance your sampling strategy. Code examples and visualizations will be shared to support hands-on learning, and the talk will conclude with tips, pitfalls to avoid, and a brief Q&amp;A.</p>
-<ul>
-<li>Other resources: https://qmd4sci.njtierney.com/</li>
-<li>Quarto and VS Code: https://quarto.org/docs/tools/vscode/index.html</li>
-</ul>
+<p><strong>Abstract:</strong> Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios.</p>
+<p><strong>Description:</strong> Whether you’re conducting surveys, building predictive models, or working with imbalanced datasets, stratified sampling is a powerful technique to ensure your data is representative and your insights are reliable.</p>
+<p>In survey research, especially within diverse populations like college students, simple random sampling can lead to under-representation of key subgroups. Stratified sampling addresses this by dividing the population into distinct strata (e.g., age groups, majors, demographics) and sampling proportionally from each. This approach reduces sampling bias and improves the reliability of statistical estimates.</p>
+<p>In this presentation, I will demonstrate how to use Python to implement stratified sampling in a student survey at our college. By maintaining proportional representation across age groups, we ensured that our sample reflected the diversity of the student body. I’ll walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and data analysis.</p>
+<p>We’ll also explore how to calculate weighted means when sample proportions differ from population proportions, which is a crucial step in producing unbiased estimates. Code examples and visualizations will be shared via GitHub to support hands-on learning and reproducibility.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -231,16 +230,31 @@ Cary K. Jim, Ph.D.
           display:block!important;
       }</style></aside>
 </section>
+<section>
 <section id="introduction" class="title-slide slide level1 center">
 <h1>Introduction</h1>
-<p>When there is a large population to study, it is impossible to survey everyone because in reality we are always limited by time, budget, or other resources. Often, the use of simple random sampling may comes to mind (i.e., draw any random sample), and this may not be the best approach if you want to be able to apply the results back to the large population. In this scenario, the use of stratified sampling to ensure that subgroups within a population are adequately represented in the sample is important. This method can reduce sampling bias/errors, and improve the precision of estimates. It is also more efficient than simple random sampling for heterogeneous populations.</p>
-<aside class="notes">
+
+</section>
+<section id="learning-outcomes" class="slide level2 smaller scrollable">
+<h2>Learning Outcomes:</h2>
+<ol type="1">
+<li><p>Understand when to use stratified sampling over random sampling</p></li>
+<li><p>Learn how to define subgroups (strata) and implement sampling in Python</p></li>
+<li><p>Evaluate sample representativeness by checking distribution patterns</p></li>
+<li><p>Apply weights to adjust for unequal proportions in score estimation</p></li>
+</ol>
 <p><strong>Assumptions of the audience</strong></p>
 <ul>
 <li><p>Some familiarity with descriptive statistics and sampling frameworks</p></li>
 <li><p>Basic understanding of Python programming language</p></li>
 <li><p>Interest in data analysis and research methodologies</p></li>
 </ul>
+<p>Today’s presentation uses <strong>stratified random sampling</strong> to identify subgroups proportional to the student population in one semester.</p>
+</section>
+<section id="what-is-stratified-sampling-and-its-application" class="slide level2">
+<h2>What is Stratified Sampling and Its Application?</h2>
+<aside class="notes">
+<p>When there is a large population to study, it is impossible to survey everyone because in reality we are always limited by time, budget, or other resources. The use of simple random sampling may comes to mind, and depends on your research objectives, this method may not be the best approach if you want to be able to apply the results to inform programs, policies, or other initiatives. Last, designing research with stratification allows for analysis of differences across key demographic or behavioral segments. In sum, stratified sampling can reduce sampling bias/errors, and improve the precision of estimates. It is also more efficient than simple random sampling for heterogeneous populations.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -252,51 +266,54 @@ Cary K. Jim, Ph.D.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-
-<section>
-<section id="what-is-stratified-sampling-and-its-application" class="title-slide slide level1 center">
-<h1>What is Stratified Sampling and Its Application?</h1>
-
-</section>
-<section id="application-of-stratified-sampling-in-various-fields" class="slide level2">
-<h2>Application of Stratified Sampling in Various Fields:</h2>
 <ul>
-<li>Market research: Understanding customer preferences across different demographics (User segmentation)</li>
-<li>Public health: Estimating disease prevalence in different age groups (Epidemiological studies)</li>
-<li>Education: Assessing student performance across different characteristics (Educational assessments)</li>
-<li>Experimental research: Ensuring balanced representation of treatment groups (Clinical trials)</li>
+<li><p>Challenges in surveying large populations</p></li>
+<li><p>Aligning research outcomes with actionable goals</p></li>
+<li><p>Enhancing insight discovery through subgroup analysis</p></li>
 </ul>
 </section>
 <section id="stratified-sampling-overview" class="slide level2 smaller">
 <h2>Stratified Sampling Overview</h2>
-<p>Stratified sampling is a design method that involves dividing a population into smaller subgroups known as strata.</p>
+<p>Stratified sampling is a research design method that involves dividing a population into smaller subgroups known as strata.</p>
 <ul>
-<li><p>The strata are formed based on the members’ shared attributes or characteristics (e.g., age group, gender, geographic location).</p></li>
-<li><p>Then, a selection approach is used to draw the sample, such as random, systematic, or convenience sampling.</p></li>
+<li><p>Strata are formed based on shared attributes or characteristics (e.g., age group, gender, geographic location).</p></li>
+<li><p>A sampling technique, such as random, systematic, or convenience sampling, is then applied to select participants in each stratum.</p></li>
 </ul>
+<p>📘 Example</p>
 <ol type="1">
-<li><p>📘Example: - Systematic sampling with strata: You divided a college students population based on their major and then select every <em>k</em>th element based on your the size needed from each stratum.</p></li>
-<li><p>📘Example: - Stratified random sampling: You divided a college students population based on their major and then randomly select a proportionate number of students from each major.</p></li>
+<li><p>Systematic sampling with strata: You divided a college students population based on their major and then select every <em>k</em>th element based on your the size needed from each stratum.</p></li>
+<li><p>Stratified random sampling: You divided a college students population based on their major and then randomly select a proportionate number of students from each major.</p></li>
 </ol>
 </section></section>
 <section>
-<section id="stratified-random-sampling-todays-focus" class="title-slide slide level1 center">
-<h1>Stratified Random Sampling (Today’s Focus)</h1>
-<p>Start with the population dataset and identify the variables you use for stratification (variables should be distinct, non-overlapping groups).</p>
-<p>Determine the sample size (total observations) you need for your study. We will use proportional allocation in today’s demo, in which the proportion of each stratum in the sample is the same as the proportion of each stratum in the population. There are other approaches too, such as optimal allocation, where you may increase a proportion of a specific strata if that is important to your study/research.</p>
-<p>The final step is to select the random samples from each stratum by the proportions and then combine the samples from all strata to form the final sample group.</p>
+<section id="todays-topic-stratified-random-sampling" class="title-slide slide level1 center">
+<h1>Today’s Topic: Stratified Random Sampling</h1>
+
+</section>
+<section id="procedures" class="slide level2 smaller">
+<h2>Procedures</h2>
+<ul>
+<li><p>Start with the population dataset and identify the variables for stratification. The variables should be distinct, non-overlapping groups, e.g., Age, Gender, Race.</p></li>
+<li><p>Determine the required sample size (i.e., total observations) you need for your study.</p>
+<ul>
+<li><p>We will use proportional allocation today where each stratum’s representation matches to its proportion in the population.</p></li>
+<li><p>Another approach is optimal allocation, which increase the sample size for a specific strata that is important to the research.</p></li>
+</ul></li>
+<li><p>Select the random samples from each stratum and combine all strata to form the complete sample group.</p></li>
+</ul>
 </section>
 <section id="implementation-steps-with-python" class="slide level2">
 <h2>Implementation Steps with Python</h2>
 <ol type="1">
 <li>Define the population and identify relevant strata and its proportions.</li>
-<li>Determine the sample size for each stratum based on its proportion in the population.</li>
-<li>Randomly select samples by proportions for each stratum from the population.</li>
-<li>Combine the samples from all strata to form the final sample.</li>
+<li>Determine the sample size for each stratum based on its proportion in the overall population.</li>
+<li>Randomly select samples by each stratum according to the calculated proportions.</li>
+<li>Combine the selected samples from all strata to form the final sample group.</li>
+<li>Examine the sample distribution and adjust strata definitions if needed.</li>
 </ol>
 <aside class="notes">
-<p>The dataset used in this presentation is a replication from a survey I’ve conducted in my work. I choose a few key demographic variables such as race, ethnicity, age group, and gender to illustrate the process and how we make decision in a study. I’ve generated a synthetic dataset for today’s demonstration. The complete set of codes can be found in the GitHub repository linked in the presentation.</p>
+<p><strong>About the Dataset:</strong></p>
+<p>The participant dataset used in this presentation is synthetic, modeled after a realistic student population in a small college. It was created specifically for demonstration purposes. To illustrate the stratified sampling process and decision-making involved in research design, I selected a few key demographic variables: <strong>race, age/age group, and gender</strong> and will discuss more in-depth in today’s presentation. The full dataset and code are available in the GitHub repository linked at the end of the presentation.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -309,144 +326,132 @@ Cary K. Jim, Ph.D.
           display:block!important;
       }</style></aside>
 </section>
-<section id="step-1-define-population-and-strata" class="slide level2 smaller">
-<h2>Step 1: Define Population and Strata</h2>
-<p>First, we need to assess the distribution of the strata in the population. In this example, we know there are 4 categorical variables: Race, ethnicity, and gender and 2 numerical variables: Age and Overall GPA. Because we have multiple variables, we need to do some re-coding to create strata that make sense for our analysis. It is because each stratum will be used in weight calculation later on when we analyze the survey results.</p>
-<p><strong>Student Population at College X:</strong> 25,000</p>
-<p>(add a diagram)</p>
-</section>
-<section id="categorical-variables-summary" class="slide level2 scrollable smaller">
-<h2>Categorical Variables Summary</h2>
-<p><strong>Table 1. Categorical variables and proportion of each group</strong></p>
-<table class="caption-top">
-<caption><em>Note.</em> Unknown is used for missing data or prefer not to answer during data collection.</caption>
-<colgroup>
-<col style="width: 24%">
-<col style="width: 26%">
-<col style="width: 24%">
-<col style="width: 24%">
-</colgroup>
+<section id="step-1-identify-the-strata-and-its-proportions" class="slide level2 smaller scrollable">
+<h2>Step 1: Identify the strata and its proportions</h2>
+<p>In this example, the population is defined as 25,000 college students.</p>
+<p><strong>Variables in the population dataset:</strong></p>
+<div id="4d2cf5dc" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
 <thead>
-<tr class="header">
-<th>Gender</th>
-<th>Race</th>
-<th>Ethnicity</th>
-<th>Student Type</th>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">StudentID</th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Ethnicity</th>
+<th data-quarto-table-cell-role="th">StudentType</th>
+<th data-quarto-table-cell-role="th">OverallGPA</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Female (56%)</td>
-<td>Asian (10%)</td>
-<td>Hispanic or Latino (25%)</td>
-<td>Freshman (29%)</td>
-</tr>
-<tr class="even">
-<td>Male (42%)</td>
-<td>American Indian or Alaska Native (3%)</td>
-<td>Not Hispanic or Latino (75%)</td>
-<td>Sophmore (19%)</td>
-</tr>
-<tr class="odd">
-<td>Non-Binary (1%)</td>
-<td>Black or African American (19%)</td>
-<td>Unknown (0%)</td>
-<td>Junior (18%)</td>
-</tr>
-<tr class="even">
-<td>Unknown (1%)</td>
-<td>Native Hawaiian or Other Pacific Islander (3%)</td>
-<td></td>
-<td>Senior (23%)</td>
-</tr>
-<tr class="odd">
-<td></td>
-<td>White (55%)</td>
-<td></td>
-<td>Continuing Education (1%)</td>
-</tr>
-<tr class="even">
-<td></td>
-<td>Two or more races (7%)</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td>Unknown (3%)</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="numerical-variables-summary" class="slide level2 scrollable smaller">
-<h2>Numerical Variables Summary</h2>
-<p><strong>Table 2. Numerical variables and distribution of values</strong></p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th></th>
-<th>Age</th>
-<th>Overall GPA</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Count</strong></td>
-<td>25,000</td>
-<td>25,000</td>
-</tr>
-<tr class="even">
-<td><strong>Mean</strong></td>
-<td>19.63</td>
-<td>2.81</td>
-</tr>
-<tr class="odd">
-<td><strong>Min</strong></td>
-<td>17</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td><strong>Max</strong></td>
-<td>44</td>
-<td>4.0</td>
-</tr>
-<tr class="odd">
-<td><strong>Std</strong></td>
-<td>2.82</td>
-<td>1.02</td>
-</tr>
-<tr class="even">
-<td><strong>25%</strong></td>
+<th data-quarto-table-cell-role="th">0</th>
+<td>SID000001</td>
+<td>Male</td>
 <td>18</td>
-<td>2.68</td>
-</tr>
-<tr class="odd">
-<td><strong>50%</strong></td>
-<td>19</td>
-<td>3.12</td>
+<td>White</td>
+<td>Hispanic or Latino</td>
+<td>Freshman</td>
+<td>4.00</td>
 </tr>
 <tr class="even">
-<td><strong>75%</strong></td>
+<th data-quarto-table-cell-role="th">1</th>
+<td>SID000002</td>
+<td>Female</td>
+<td>40</td>
+<td>Two or more races</td>
+<td>Hispanic or Latino</td>
+<td>Continuing Education</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>SID000003</td>
+<td>Female</td>
+<td>19</td>
+<td>White</td>
+<td>Not Hispanic or Latino</td>
+<td>Junior</td>
+<td>3.23</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>SID000004</td>
+<td>Male</td>
 <td>20</td>
-<td>3.39</td>
+<td>White</td>
+<td>Not Hispanic or Latino</td>
+<td>Senior</td>
+<td>3.42</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>SID000005</td>
+<td>Female</td>
+<td>33</td>
+<td>Black or African American</td>
+<td>Not Hispanic or Latino</td>
+<td>Continuing Education</td>
+<td>0.00</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="step-2.-determine-the-sample-size-for-each-stratum" class="slide level2">
-<h2>Step 2. Determine the sample size for each stratum</h2>
-<h3 id="cochrans-sample-size-formula">2.1 Cochran’s Sample Size Formula</h3>
-<p>There are many methods to determine sample size. The most common method we use in educational measurement is Cochran’s Sample Size Formula.</p>
-<p>There are two steps in this process:</p>
+
+</div>
+</div>
+</div>
 <ul>
-<li><p>Apply the ideal sample size formula with a set of parameters for a desired level of precision.</p></li>
-<li><p>Use the obtained ideal sample size value in the modified formula for finite population (i.e., The student population size is known) to get the adjusted sample size.</p></li>
+<li><p>Four categorical variables: gender, race, ethnicity, and student type</p></li>
+<li><p>Two numerical variables: age and overall GPA</p></li>
+<li><p>Select the most relevant variables and some re-coding would be necessary</p>
+<ul>
+<li><p>Race and gender</p></li>
+<li><p>Re-code age to Age Group</p></li>
+</ul></li>
 </ul>
+<aside class="notes">
+<p>Notes: We begin by defining our population—25,000 college students in this example. Next, we assess the distribution of potential strata in the dataset. The dataset includes three categorical variables: race, ethnicity, and gender, and two numerical variables: age and overall GPA. Since we’re working with multiple variables, we need to re-code some of them to create meaningful strata. This helps ensure that the strata are both analytically useful and aligned with the research objectives. At this stage, we also decide which variables are most relevant to our study. Not all variables may be necessary, so we focus on those that best support our research goals. This step is crucial because each stratum will be used in weight calculations during analysis. It also becomes especially important when the final respondent group doesn’t perfectly reflect the population structure, allowing us to adjust and maintain representativeness.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="cochrans-sample-size-formula-1" class="slide level2 smaller scrollable">
-<h2>Cochran’s Sample Size Formula</h2>
+<section id="step-2.-determine-the-sample-size-and-proportions-of-each-subgroup" class="slide level2 smaller">
+<h2>Step 2. Determine the sample size and proportions of each subgroup</h2>
+<p><strong>2.1 Cochran’s Sample Size</strong></p>
+<p>Commonly use method is survey research or studies in educational settings</p>
+<p><strong>There are two steps in this process:</strong></p>
+<ol type="1">
+<li><p>Apply Cochran’s ideal sample size formula with a set of parameters for a desired level of precision.</p></li>
+<li><p>Use the obtained ideal sample size value in the modified formula for finite population (i.e., The student population size is known) to get the adjusted sample size.</p></li>
+</ol>
+</section>
+<section id="cochrans-sample-size-formula" class="slide level2 smaller scrollable">
+<h2>Cochran’s sample size formula</h2>
 <p>The ideal sample size for an infinite population is given by: <span class="math display">\[
 n_0 = \frac{Z^2 \, p \, (1 - p)}{e^2}
 \]</span> where:</p>
@@ -465,72 +470,601 @@ n = \frac{n_0}{1 + \left( \frac{n_0 - 1}{N} \right)}
 <li>( N ) = population size</li>
 </ul>
 </section>
-<section id="code-example-cochrans-sample-size-calculation" class="slide level2 smaller">
-<h2>Code Example: Cochran’s Sample Size Calculation</h2>
-<div id="2c84f04c" class="cell" data-execution_count="1">
+<section id="code-example-cochrans-sample-size-calculation" class="slide level2 smaller scrollable">
+<h2>2.2 Code example: Cochran’s sample size calculation</h2>
+<div id="c4593823" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
-<span id="cb1-2"><a href=""></a><span class="kw">def</span> cochran_sample_size(Z, p, e, N):</span>
-<span id="cb1-3"><a href=""></a>    n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-4"><a href=""></a>    n <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
-<span id="cb1-5"><a href=""></a>    <span class="cf">return</span> <span class="bu">int</span>(n)</span>
-<span id="cb1-6"><a href=""></a><span class="co"># Parameters</span></span>
-<span id="cb1-7"><a href=""></a>Z <span class="op">=</span> stats.norm.ppf(<span class="fl">0.975</span>)  <span class="co"># 95% confidence level (i.e., 1.96)</span></span>
-<span id="cb1-8"><a href=""></a>p <span class="op">=</span> <span class="fl">0.5</span>                     <span class="co"># Estimated proportion</span></span>
-<span id="cb1-9"><a href=""></a>e <span class="op">=</span> <span class="fl">0.05</span>                    <span class="co"># Margin of error</span></span>
-<span id="cb1-10"><a href=""></a>N <span class="op">=</span> <span class="dv">25000</span>                   <span class="co"># Student Population size (in this example)</span></span>
-<span id="cb1-11"><a href=""></a><span class="co"># Calculate sample size</span></span>
-<span id="cb1-12"><a href=""></a>sample_size <span class="op">=</span> cochran_sample_size(Z, p, e, N)</span>
-<span id="cb1-13"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Calculated sample size: </span><span class="sc">{</span>sample_size<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="co"># Cochran's Sample Size Calculation</span></span>
+<span id="cb1-2"><a href=""></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb1-3"><a href=""></a><span class="kw">def</span> cochran_sample_size(Z, p, e, N):</span>
+<span id="cb1-4"><a href=""></a>    <span class="co">"""</span></span>
+<span id="cb1-5"><a href=""></a><span class="co">    Calculate the required sample size using Cochran's formula, adjusted for a finite population.</span></span>
+<span id="cb1-6"><a href=""></a></span>
+<span id="cb1-7"><a href=""></a><span class="co">    Parameters:</span></span>
+<span id="cb1-8"><a href=""></a><span class="co">        Z (float): Z-value (e.g., 1.96 for 95% confidence level)</span></span>
+<span id="cb1-9"><a href=""></a><span class="co">Z = stats.norm.ppf(0.975)   # Z-score for the upper tail of a two-tailed 95% confidence interval (1.96 for 95% confidence)</span></span>
+<span id="cb1-10"><a href=""></a><span class="co">        e (float): Margin of error (e.g., 0.05 for 5%)</span></span>
+<span id="cb1-11"><a href=""></a><span class="co">        N (int): Population size</span></span>
+<span id="cb1-12"><a href=""></a></span>
+<span id="cb1-13"><a href=""></a><span class="co">    Returns:</span></span>
+<span id="cb1-14"><a href=""></a><span class="co">        int: Adjusted sample size for the finite population</span></span>
+<span id="cb1-15"><a href=""></a><span class="co">    """</span></span>
+<span id="cb1-16"><a href=""></a>    n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-17"><a href=""></a>    n <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
+<span id="cb1-18"><a href=""></a>    <span class="cf">return</span> <span class="bu">int</span>(n)</span>
+<span id="cb1-19"><a href=""></a></span>
+<span id="cb1-20"><a href=""></a><span class="co"># Parameters</span></span>
+<span id="cb1-21"><a href=""></a>Z <span class="op">=</span> stats.norm.ppf(<span class="fl">0.975</span>)   <span class="co"># Calculate the critical z-value for a 95% confidence level in a standard normal distribution</span></span>
+<span id="cb1-22"><a href=""></a>p <span class="op">=</span> <span class="fl">0.5</span>                     <span class="co"># Estimated proportion (use 0.5 for maximum variability, sort of like worst-case scenario)</span></span>
+<span id="cb1-23"><a href=""></a>e <span class="op">=</span> <span class="fl">0.05</span>                    <span class="co"># Margin of error (precision level, more precision requires larger sample size)</span></span>
+<span id="cb1-24"><a href=""></a>N <span class="op">=</span> <span class="dv">25000</span>                   <span class="co"># Finite population size (in this example, student population size)</span></span>
+<span id="cb1-25"><a href=""></a></span>
+<span id="cb1-26"><a href=""></a><span class="co"># Calculate sample size</span></span>
+<span id="cb1-27"><a href=""></a></span>
+<span id="cb1-28"><a href=""></a><span class="co"># Calculate n0 and adjusted sample size for finite population</span></span>
+<span id="cb1-29"><a href=""></a>n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-30"><a href=""></a>sample_size <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
+<span id="cb1-31"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Ideal sample size (n0): </span><span class="sc">{</span><span class="bu">round</span>(n0)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-32"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Adjusted sample size for finite population: </span><span class="sc">{</span><span class="bu">int</span>(sample_size)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Calculated sample size: 378</code></pre>
+<pre><code>Ideal sample size (n0): 384
+Adjusted sample size for finite population: 378</code></pre>
 </div>
 </div>
-<p>Now that we have obtained the sample size value adjusted for the finite population. We can then apply this to determine how many person we need from each subgroup (strata). A proportion of each group was established in a previous step, and now we need to do a few more calculation and then apply random selection to get the final sample for the study.</p>
+<p>The result from the code above shows that the ideal sample size for an infinite population is 384, and the adjusted sample size for our finite population of 25,000 students is 378. Next, we will use this adjusted sample size to determine how many students we need from each subgroup (strata) in the population.</p>
+<aside class="notes">
+<p>In this slide, we’re introducing Cochran’s Sample Size Formula, a widely used method in educational and survey research to determine how many participants are needed for statistically valid results. We start with the ideal sample size formula for an infinite population. This formula uses three key parameters:</p>
+<p>Z-value, which corresponds to the desired confidence level (e.g., 1.96 for 95% confidence), p, the estimated proportion of the population with the attribute of interest (we often use 0.5 to account for maximum variability), and e, the margin of error we’re willing to accept (commonly 0.05 for 5%).</p>
+<p>Once we calculate the ideal sample size, we adjust it for a finite population—in our case, 25,000 college students—using a modified formula. This ensures our sample size is appropriate for the actual population size. The Python code example demonstrates how to implement this calculation programmatically. It uses the scipy.stats library to compute the Z-value and then applies both formulas to get the ideal and adjusted sample sizes. This process helps ensure that our survey results are both accurate and representative of the population we’re studying.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="stratified-random-sample-groups" class="slide level2">
-<h2>Stratified Random Sample Groups</h2>
-<p>It is decided that three of the demographic background will be meaningful for the study: Gender, Race, and Age Group. Since age is collected as a numerical variable and it has not be categorized, we will have to re-group the values to form a new variable as “Age Group”.</p>
-<p>Note. You may be wondering why, and the reason is when we are using the stratified method, each level within a group is a part of a combination. For example, if I have 2 levels for Gender, and then 5 levels for Race, I’m really looking at 10 different ways of the combination between gender and race. If your finite population is not big enough, technically, you will not be able to stratified meaningfully to account for all the different combination and have a decent sample size group to survey.</p>
+<section id="re-code-age-to-age-group" class="slide level2 smaller">
+<h2>Re-code Age to Age Group</h2>
+<p><strong>2.3 Code example: Grouping age by increments of 2 or 10 {.smaller}</strong></p>
+<div id="3df31534" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># Recode Age to Age Group</span></span>
+<span id="cb3-2"><a href=""></a>population_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> pd.cut(population_data[<span class="st">'Age'</span>], </span>
+<span id="cb3-3"><a href=""></a>                                       bins<span class="op">=</span>[<span class="dv">16</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">29</span>, <span class="dv">31</span>, <span class="dv">41</span>, <span class="dv">51</span>, <span class="dv">61</span>, <span class="dv">81</span>],</span>
+<span id="cb3-4"><a href=""></a>                                       labels<span class="op">=</span>[<span class="st">'16-18'</span>, <span class="st">'19-20'</span>, <span class="st">'21-22'</span>, <span class="st">'23-24'</span>, <span class="st">'25-26'</span>, <span class="st">'27-28'</span>, <span class="st">'29-30'</span>, <span class="st">'31-40'</span>, <span class="st">'41-50'</span>, <span class="st">'51-60'</span>, <span class="st">'61-80'</span>],</span>
+<span id="cb3-5"><a href=""></a>                                   right<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-6"><a href=""></a>population_data[[<span class="st">'Age'</span>, <span class="st">'Age_Group'</span>]].head(<span class="dv">10</span>)</span>
+<span id="cb3-7"><a href=""></a></span>
+<span id="cb3-8"><a href=""></a><span class="co"># Age group distribution</span></span>
+<span id="cb3-9"><a href=""></a>population_data[<span class="st">'Age_Group'</span>].value_counts().sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>Age_Group
+16-18    10123
+19-20     8896
+21-22     4222
+23-24      506
+25-26      329
+27-28      277
+29-30      235
+31-40      400
+41-50       12
+51-60        0
+61-80        0
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<aside class="notes">
+<p>In this step, we re-code the age variable into categorical age groups using pandas’ <code>cut</code> function and we used the increments of 2. However, this grouping is a bit problematic because the age are skewed to the younger age groups. We have to re-do the categorization to make it more useful for stratified sampling.</p>
+<p>Now. You may be wondering why, and the reason is when we are using the stratified method, each level within a group is a part of a combination. For example, if I have 2 levels for Gender, and then 5 levels for Race, I’m really looking at 10 different ways of the combination between gender and race. If your finite population is not big enough, technically, you will not be able to stratified meaningfully to account for all the different combination and have a decent sample size group to survey.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<p><strong>2.4 Code example: Grouping age by intended age range {.smaller}</strong></p>
+<div id="c70877db" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>Age_Group
+16-18    10123
+19-20     8896
+21-22     4222
+23-30     1347
+31+        412
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<p>This time the levels in the age group is more appropriate and have a decent count at each level. Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.</p>
 </section>
-<section id="code-example-stratified-random-selection" class="slide level2">
-<h2>Code Example: Stratified Random Selection</h2>
-<p>Because we have a defined group of students in a roster, I can then apply the method directly on the dataset to first pulled the proportion of each subgroup and then randomly select the number of students needed.</p>
-<p>&lt;insert graph&gt;</p>
+<section id="step-3-select-random-samples-by-each-stratum-by-the-calculated-proportions" class="slide level2">
+<h2>Step 3: Select random samples by each stratum by the calculated proportions</h2>
 <p>The strata (subgroups) are determined by the following categories:</p>
-<p>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gender (Female or Male)</p>
-<p>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Race (American Indian/Alaska Native, Asian, Black/African American, Native Hawaiian/Pacific Islander, White, Multiracial, Unknown)</p>
-<p>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Age Group (18-24, 25 or above)</p>
-<p>This is to ensure that all relevant subgroups are adequately represented. The ethnicity and overall GPA categories were not included in sampling because it would create too many strata and there will not be enough samples by strata to make meaningful inferences. However, we kept that categorical information as background variables that can be used when reviewing the survey results. Then, we applied proportionate sampling from each subgroup that reflects the student population. Each student was picked randomly in the R script.</p>
-<p><strong>Data Analysis</strong></p>
-<p>Weighting techniques are applied to help correct imbalances and improve the reliability of the results due to low response rate (3%).</p>
-<p><strong>Post-Stratification Weights Calculation</strong></p>
-<p>Weight for each demographic characteristic can be calculated by using the proportion of each category from the sample population and the proportion of each category from the respondent population.</p>
-<p>In general, the formula for calculating weight for each category is</p>
-<p>Because of the use of combined categories, each participant was assigned a weight from the following calculation:</p>
-<p>Race of sample/respondent* Age_group of sample/respondents* gender of sample/respondents</p>
-</section></section>
-<section id="extension" class="title-slide slide level1 center">
-<h1>Extension</h1>
-<p>How to handle classification tasks with imbalanced classes using stratified sampling techniques?</p>
-<p>How many to invite? Depending on historical response rate, if its only been 10%, then you have to take the sample size 2000 divided by .10 response rate to see the number you should invite.</p>
-<p><strong>7. Analyze the Data</strong></p>
-<p>Treat the combined sample as representative of the population, but account for stratification when analyzing (especially in weighted estimates or variance calculations).</p>
-<p><strong>5. Common Pitfalls &amp; Tips (2 minutes)</strong></p>
 <ul>
-<li>Small strata sizes</li>
-<li>Over-stratification</li>
-<li>When stratification isn’t necessary</li>
+<li><p>Gender (Female or Male)</p></li>
+<li><p>Race (Asian, Black or African American, White, Two or more races, Other)</p></li>
+<li><p>Age Group (16-18, 19-20, 21-22, 23-30, 31+)</p></li>
 </ul>
+<p>Note. You can review the jupyter notebook in the GitHub Repo that shows the iteration of determine the proportion of each stratum.</p>
+</section>
+<section id="code-example-caculate-proportions-and-apply-it-to-select-stratum" class="slide level2">
+<h2>3.1 Code example: Caculate proportions and apply it to select stratum</h2>
+<div id="e6bbfe12" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="co"># Calculate proportions for each stratum</span></span>
+<span id="cb6-2"><a href=""></a>strata_counts <span class="op">=</span> population_data.groupby([<span class="st">'Gender'</span>, <span class="st">'Race'</span>, <span class="st">'Age_Group'</span>]).size()</span>
+<span id="cb6-3"><a href=""></a>strata_proportions <span class="op">=</span> strata_counts <span class="op">/</span> <span class="bu">len</span>(population_data)</span>
+<span id="cb6-4"><a href=""></a>strata_proportions <span class="op">=</span> strata_proportions.reset_index(name<span class="op">=</span><span class="st">'Proportion'</span>)</span>
+<span id="cb6-5"><a href=""></a>strata_proportions.head()</span>
+<span id="cb6-6"><a href=""></a><span class="co"># Sample size for each stratum</span></span>
+<span id="cb6-7"><a href=""></a>total_sample_size <span class="op">=</span> <span class="dv">378</span>  <span class="co"># From Cochran's calculation</span></span>
+<span id="cb6-8"><a href=""></a>strata_proportions[<span class="st">'Sample_Size'</span>] <span class="op">=</span> (strata_proportions[<span class="st">'Proportion'</span>] <span class="op">*</span> total_sample_size).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
+<span id="cb6-9"><a href=""></a>strata_proportions.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Proportion</th>
+<th data-quarto-table-cell-role="th">Sample_Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>16-18</td>
+<td>0.00616</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>19-20</td>
+<td>0.00584</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>21-22</td>
+<td>0.00368</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>23-30</td>
+<td>0.00072</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>31+</td>
+<td>0.00032</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="step-4.-apply-random-selection-by-each-strata-and-form-the-completed-sample-dataset" class="slide level2 smaller">
+<h2>Step 4. Apply random selection by each strata and form the completed sample dataset</h2>
+<div id="50408cd7" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="co"># Randomly select samples from each stratum</span></span>
+<span id="cb7-2"><a href=""></a>sampled_data <span class="op">=</span> pd.DataFrame()</span>
+<span id="cb7-3"><a href=""></a><span class="cf">for</span> _, row <span class="kw">in</span> strata_proportions.iterrows():</span>
+<span id="cb7-4"><a href=""></a>    stratum <span class="op">=</span> population_data[</span>
+<span id="cb7-5"><a href=""></a>        (population_data[<span class="st">'Gender'</span>] <span class="op">==</span> row[<span class="st">'Gender'</span>]) <span class="op">&amp;</span></span>
+<span id="cb7-6"><a href=""></a>        (population_data[<span class="st">'Race'</span>] <span class="op">==</span> row[<span class="st">'Race'</span>]) <span class="op">&amp;</span></span>
+<span id="cb7-7"><a href=""></a>        (population_data[<span class="st">'Age_Group'</span>] <span class="op">==</span> row[<span class="st">'Age_Group'</span>])</span>
+<span id="cb7-8"><a href=""></a>    ]</span>
+<span id="cb7-9"><a href=""></a>    sampled_stratum <span class="op">=</span> stratum.sample(n<span class="op">=</span>row[<span class="st">'Sample_Size'</span>], replace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-10"><a href=""></a>    sampled_data <span class="op">=</span> pd.concat([sampled_data, sampled_stratum])</span>
+<span id="cb7-11"><a href=""></a>sampled_data.reset_index(drop<span class="op">=</span><span class="va">True</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-12"><a href=""></a>sampled_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">StudentID</th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Ethnicity</th>
+<th data-quarto-table-cell-role="th">StudentType</th>
+<th data-quarto-table-cell-role="th">OverallGPA</th>
+<th data-quarto-table-cell-role="th">Age_Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>SID020280</td>
+<td>Female</td>
+<td>18</td>
+<td>American Indian or Alaska Native</td>
+<td>Not Hispanic or Latino</td>
+<td>Sophomore</td>
+<td>2.38</td>
+<td>16-18</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>SID011910</td>
+<td>Female</td>
+<td>18</td>
+<td>American Indian or Alaska Native</td>
+<td>Not Hispanic or Latino</td>
+<td>Freshman</td>
+<td>2.65</td>
+<td>16-18</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>SID009192</td>
+<td>Female</td>
+<td>20</td>
+<td>American Indian or Alaska Native</td>
+<td>Not Hispanic or Latino</td>
+<td>Senior</td>
+<td>3.29</td>
+<td>19-20</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>SID004979</td>
+<td>Female</td>
+<td>20</td>
+<td>American Indian or Alaska Native</td>
+<td>Hispanic or Latino</td>
+<td>Junior</td>
+<td>2.79</td>
+<td>19-20</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>SID024848</td>
+<td>Female</td>
+<td>21</td>
+<td>American Indian or Alaska Native</td>
+<td>Not Hispanic or Latino</td>
+<td>Senior</td>
+<td>3.52</td>
+<td>21-22</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="step-5.-check-the-proportion-of-the-sampled-data-to-the-population-data" class="slide level2 smaller scrollable">
+<h2>Step 5. Check the proportion of the sampled data to the population data</h2>
+<p><strong>Sampled Dataset</strong></p>
+<div id="32bb1ae3" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Count</th>
+<th data-quarto-table-cell-role="th">Proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>16-18</td>
+<td>2</td>
+<td>0.005333</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>19-20</td>
+<td>2</td>
+<td>0.005333</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>21-22</td>
+<td>1</td>
+<td>0.002667</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Female</td>
+<td>Asian</td>
+<td>16-18</td>
+<td>9</td>
+<td>0.024000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Female</td>
+<td>Asian</td>
+<td>19-20</td>
+<td>8</td>
+<td>0.021333</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Female</td>
+<td>Asian</td>
+<td>21-22</td>
+<td>3</td>
+<td>0.008000</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Female</td>
+<td>Asian</td>
+<td>23-30</td>
+<td>1</td>
+<td>0.002667</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>16-18</td>
+<td>16</td>
+<td>0.042667</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>19-20</td>
+<td>14</td>
+<td>0.037333</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>21-22</td>
+<td>7</td>
+<td>0.018667</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="24655a68" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Count</th>
+<th data-quarto-table-cell-role="th">Proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>16-18</td>
+<td>154</td>
+<td>0.00616</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>19-20</td>
+<td>146</td>
+<td>0.00584</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>21-22</td>
+<td>92</td>
+<td>0.00368</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>23-30</td>
+<td>18</td>
+<td>0.00072</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Female</td>
+<td>American Indian or Alaska Native</td>
+<td>31+</td>
+<td>8</td>
+<td>0.00032</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Female</td>
+<td>Asian</td>
+<td>16-18</td>
+<td>582</td>
+<td>0.02328</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Female</td>
+<td>Asian</td>
+<td>19-20</td>
+<td>501</td>
+<td>0.02004</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Female</td>
+<td>Asian</td>
+<td>21-22</td>
+<td>229</td>
+<td>0.00916</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Female</td>
+<td>Asian</td>
+<td>23-30</td>
+<td>75</td>
+<td>0.00300</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Female</td>
+<td>Asian</td>
+<td>31+</td>
+<td>27</td>
+<td>0.00108</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section></section>
+<section id="weights-calculation" class="title-slide slide level1 center">
+<h1>Weights Calculation</h1>
+<p>The use of weights is essential when the sample proportions differ from the population proportions. This adjustment helps to correct for any over- or under-representation of certain groups in the sample, ensuring that the analysis reflects the true population structure.</p>
+<p>Depending on the number of stratification variables and their levels, weights can be calculated for each stratum or for combined categories. The formular for calculating weights for combined categories is similar to calculating weights for individual strata, but it takes into account the joint distribution of the combined categories.</p>
+<p>&lt;add formula&gt;</p>
 </section>
 
-<section id="technical-setup-for-this-presentation" class="title-slide slide level1 center">
-<h1>Technical setup for this presentation</h1>
-<p>Python 3.13.2 environment with the following packages: - pandas</p>
-<p>Virtual environment: https://quarto.org/docs/projects/virtual-environments.html</p>
-<p>Be sure to use .gitignone to ignore the push/pull of the venv and instead run the requirement.txt file.</p>
+<section>
+<section id="extension-of-stratified-random-sampling" class="title-slide slide level1 center">
+<h1>Extension of Stratified Random Sampling</h1>
+
+</section>
+<section id="handling-imbalanced-classes-in-classification-tasks" class="slide level2">
+<h2><strong>Handling Imbalanced Classes in Classification Tasks</strong></h2>
+<p>Use <strong>stratified sampling</strong> to ensure each class is proportionally represented in training and testing datasets</p>
+<ul>
+<li><p>Prevents bias toward majority classes</p></li>
+<li><p>improves model performance and generalization</p></li>
+</ul>
+</section>
+<section id="survey-planning-with-response-rate-consideration" class="slide level2">
+<h2><strong>Survey Planning with Response Rate Consideration</strong></h2>
+<p>Although we designed the sample group of students to survey is within 400, however, we don’t often get all 400 results back. Therefore, adjust invitation count based on <strong>expected response rate</strong> can also be implemented.</p>
+<p>Example: If desired sample size is <strong>2,000</strong> and historical response rate is <strong>10%</strong>, then:<br>
+</p>
+<p>Invitations&nbsp;Required=20000* 10=20,000</p>
+<p> = = 20,000</p>
+</section></section>
+<section id="github-repo-contact-me" class="title-slide slide level1 center">
+<h1>GitHub Repo &amp; Contact Me</h1>
 
 </section>
     </div>
