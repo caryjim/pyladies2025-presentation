@@ -213,9 +213,10 @@ Once we calculate the ideal sample size, we adjust it for a finite population—
 :::
 
 ## Re-code Age to Age Group {.smaller}
+:::: {.columns}
 
-**2.3 Code example: Grouping age by increments of 2 or 10 {.smaller}**
-
+::: {.column width="50%"}
+**Example 1: By increments of 2 or 10**
 ```{python}
 #| echo: true
 # Recode Age to Age Group
@@ -228,21 +229,14 @@ population_data[['Age', 'Age_Group']].head(10)
 # Age group distribution
 population_data['Age_Group'].value_counts().sort_index()
 ```
-
-::: notes
-In this step, we re-code the age variable into categorical age groups using pandas' `cut` function and we used the increments of 2. However, this grouping is a bit problematic because the age are skewed to the younger age groups. We have to re-do the categorization to make it more useful for stratified sampling.
-
-Now. You may be wondering why, and the reason is when we are using the stratified method, each level within a group is a part of a combination. For example, if I have 2 levels for Gender, and then 5 levels for Race, I'm really looking at 10 different ways of the combination between gender and race. If your finite population is not big enough, technically, you will not be able to stratified meaningfully to account for all the different combination and have a decent sample size group to survey.
 :::
 
-**2.4 Code example: Grouping age by intended age range {.smaller}**
-
+::: {.column width="50%"}
+**Example 2: By meaningful groups**
 ```{python}
-# In previous conversion, any groups beyond the age of 40 is really small, and the population size for age 23 or above is much smaller by proportion to the younger age groups.
+#| echo: true
 
-# Therefore, we can further combine age 23 to 30 into one group, and then combine age 31 and above into a single category, called '31+'.
-
-# Ensure Age_Group is categorical and handle NaNs
+# Ensure Age_Group is categorical dtype
 if not pd.api.types.is_categorical_dtype(population_data['Age_Group']):
     population_data['Age_Group'] = population_data['Age_Group'].astype('category')
 
@@ -258,16 +252,16 @@ new_categories = {
     '51-60': '31+',
     '61-80': '31+'
 }
-# Add any missing categories to avoid ValueError
-missing_cats = set(new_categories.keys()) - set(population_data['Age_Group'].cat.categories)
-if missing_cats:
-    population_data['Age_Group'] = population_data['Age_Group'].cat.add_categories(list(missing_cats))
-
 population_data['Age_Group'] = population_data['Age_Group'].replace(new_categories)
 population_data['Age_Group'].value_counts().sort_index()
 ```
+:::
 
-This time the levels in the age group is more appropriate and have a decent count at each level. Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.
+::::
+
+In the first example, any groups beyond the age of 40 is really small, and the population size for age 23 or above is much smaller by proportion to the younger age groups. The second example levels the age group more appropriately and has a decent count at each level. 
+
+Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.
 
 ## Step 3: Select random samples by each stratum by the calculated proportions {.smaller .scrollable}
 
@@ -281,7 +275,11 @@ The strata (subgroups) are determined by the following categories:
 
 Note. You can review the jupyter notebook in the GitHub Repo that shows the iteration of determine the proportion of each stratum.
 
-## 3.1 Code example: Caculate proportions and apply it to select stratum {.smaller .scrollable} 
+::: {notes}
+Due to time constraints, we will not go through the entire iterative process of defining strata and calculating proportions in detail. However, I encourage you to explore the Jupyter notebook available in the GitHub repository linked at the end of this presentation. The notebook provides a comprehensive walkthrough of how to iteratively refine strata definitions and calculate their proportions within the population. For now, we will proceed with the final strata definitions and their corresponding proportions to demonstrate the sampling process.
+:::
+
+## 3.1 Code example: Calculate proportions and apply it to select stratum {.smaller .scrollable}
 
 ```{python}
 #| echo: true
@@ -290,11 +288,17 @@ strata_counts = population_data.groupby(['Gender', 'Race', 'Age_Group']).size()
 strata_proportions = strata_counts / len(population_data)
 strata_proportions = strata_proportions.reset_index(name='Proportion')
 strata_proportions.head()
+
 # Sample size for each stratum
 total_sample_size = 378  # From Cochran's calculation
 strata_proportions['Sample_Size'] = (strata_proportions['Proportion'] * total_sample_size).round().astype(int)
 strata_proportions.head()
 ```
+::: {.notes}
+In this code snippet, we first calculate the counts of each stratum by grouping the population data based on the defined categories:
+Gender, Race, and Age Group. We then compute the proportions of each stratum relative to the total population size. This gives us a clear understanding of how each subgroup is represented within the overall population.
+Next, we determine the sample size for each stratum by multiplying its proportion by the total sample size we calculated earlier using Cochran's formula. The resulting sample sizes are rounded to the nearest integer to ensure we have whole numbers of participants for each stratum. This step is crucial for ensuring that our sample accurately reflects the population structure.
+:::
 
 ## Step 4. Apply random selection by each strata and form the completed sample dataset {.smaller .scrollable}
 
@@ -313,22 +317,37 @@ for _, row in strata_proportions.iterrows():
 sampled_data.reset_index(drop=True, inplace=True)
 sampled_data.head()
 ```
+::: {.notes}
+In this code snippet, we perform the random selection of samples from each stratum based on the calculated sample sizes. We initialize an empty DataFrame to hold the sampled data. Then, we iterate through each row of the strata proportions DataFrame. For each stratum, we filter the population data to get the subset corresponding to the current stratum. We then randomly sample the specified number of participants from this subset using the sample method, allowing for replacement to ensure we can meet the required sample size even if the stratum is small.
+Finally, we concatenate the sampled stratum data to our main sampled_data DataFrame. After processing all strata, we reset the index of the sampled_data DataFrame to ensure it is clean and sequential. The resulting DataFrame contains our final stratified random sample, which accurately reflects the population structure based on our defined strata.
+:::
 
 ## Step 5. Check the proportion of the sampled data to the population data {.smaller .scrollable}
 
-**Sampled Dataset**
+:::: {.columns}
 
+::: {.column width="50%"}
+**Sampled Dataset (n = 378)**
 ```{python}
 sampled_stratum_counts = sampled_data.groupby(['Gender', 'Race', 'Age_Group'], observed=True).size().reset_index(name='Count')
 sampled_stratum_counts['Proportion'] = sampled_stratum_counts['Count'] / sampled_stratum_counts['Count'].sum()
-sampled_stratum_counts.head(10)
+sampled_stratum_counts[['Gender', 'Race', 'Age_Group', 'Proportion']].head(5)
 ```
+:::
 
+::: {.column width="50%"}
+**Population Dataset (N = 25,000)**
 ```{python}
 population_counts = population_data.groupby(['Gender', 'Race', 'Age_Group']).size().reset_index(name='Count')
 population_counts['Proportion'] = population_counts['Count'] / population_counts['Count'].sum()
-population_counts.head(10)
+population_counts[['Gender', 'Race', 'Age_Group', 'Proportion']].head(5)
 ```
+:::
+::::
+
+::: {.notes}
+In this slide, we compare the proportions of each stratum in both the sampled dataset and the population dataset to ensure that our stratified sampling process has accurately reflected the population structure. On the left, we display the proportions from the sampled dataset, which consists of 378 participants. We group the sampled data by Gender, Race, and Age Group, calculate the counts for each stratum, and then compute their proportions relative to the total sample size. On the right, we show the proportions from the population dataset of 25,000 students, following the same grouping and calculation process. By comparing these two sets of proportions, we can verify that our stratified sampling has successfully maintained the representativeness of the population within our sample.
+:::
 
 # Weights Calculation
 
@@ -336,11 +355,24 @@ The use of weights is essential when the sample proportions differ from the popu
 
 Depending on the number of stratification variables and their levels, weights can be calculated for each stratum or for combined categories. The formular for calculating weights for combined categories is similar to calculating weights for individual strata, but it takes into account the joint distribution of the combined categories.
 
-\<add formula\>
+## Weights Calculation Formula and Code Example {.smaller .scrollable}
+
+Weight = (Population Proportion) / (Sample Proportion)
+
+```{python}
+#| echo: true
+# Calculate population proportions for weight calculation
+population_counts = population_data.groupby(['Gender', 'Race', 'Age_Group']).size().reset_index(name='Count')
+population_counts['Proportion'] = population_counts['Count'] / population_counts['Count'].sum()
+population_counts.head(10)
+```
+::: {.notes}
+In this code snippet, we calculate the population proportions for each stratum defined by Gender, Race, and Age Group. We group the population data by these categories and compute the counts for each stratum. Then, we calculate the proportion of each stratum relative to the total population size. This information is crucial for the subsequent weight calculation, as it allows us to determine how well each stratum is represented in our sample compared to the overall population.
+:::
 
 # Extension of Stratified Random Sampling
 
-## **Handling Imbalanced Classes in Classification Tasks**
+## Handling Imbalanced Classes in Classification Tasks
 
 Use **stratified sampling** to ensure each class is proportionally represented in training and testing datasets
 
@@ -348,7 +380,7 @@ Use **stratified sampling** to ensure each class is proportionally represented i
 
 -   improves model performance and generalization
 
-## **Survey Planning with Response Rate Consideration**
+## Survey Planning with Response Rate Consideration
 
 Although we designed the sample group of students to survey is within 400, however, we don't often get all 400 results back. Therefore, adjust invitation count based on **expected response rate** can also be implemented.
 
@@ -358,3 +390,9 @@ Invitations Required=20000\* 10=20,000
 
 
 # GitHub Repo & Contact Me
+-   GitHub Repository: [GitHub Repository](https://github.com/your-repo)
+-   Contact Me: [Email](mailto:your-email@example.com)
+-   LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/your-profile)
+-   Twitter: [Twitter Handle](https://twitter.com/your-handle)
+
+Thank you for attending my presentation!
