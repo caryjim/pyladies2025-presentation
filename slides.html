@@ -330,7 +330,7 @@ Cary K. Jim, Ph.D.
 <h2>Step 1: Identify the strata and its proportions</h2>
 <p>In this example, the population is defined as 25,000 college students.</p>
 <p><strong>Variables in the population dataset:</strong></p>
-<div id="4dbee026" class="cell" data-execution_count="2">
+<div id="5deb04c4" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 <style scoped="">
@@ -454,16 +454,19 @@ Cary K. Jim, Ph.D.
 <h2>Cochran’s sample size formula</h2>
 <p>The ideal sample size for an infinite population is given by: <span class="math display">\[
 n_0 = \frac{Z^2 \, p \, (1 - p)}{e^2}
-\]</span> where:</p>
+\]</span></p>
+<p>where:</p>
 <ul>
 <li>( n<sub>0</sub> ) = initial sample size from Cochran’s formula for an infinite population</li>
 <li>( Z ) = Z-value (e.g., 1.96 for 95% confidence, z-table lookup)</li>
 <li>( p ) = estimated proportion of the attribute present in the population (assuming 0.5 for largest variability)</li>
 <li>( e ) = margin of error (e.g., 0.05 for 5%, the desired level of precision)</li>
 </ul>
-<p>The sample size adjusted for a finite population is given by: <span class="math display">\[
+<p>The sample size adjusted for a finite population is given by:</p>
+<p><span class="math display">\[
 n = \frac{n_0}{1 + \left( \frac{n_0 - 1}{N} \right)}
-\]</span> where:</p>
+\]</span></p>
+<p>where:</p>
 <ul>
 <li>( n ) = adjusted sample size for a finite population</li>
 <li>( n<sub>0</sub> ) = theoretical sample value obtained from Cochran’s formula for an infinite population</li>
@@ -472,41 +475,29 @@ n = \frac{n_0}{1 + \left( \frac{n_0 - 1}{N} \right)}
 </section>
 <section id="code-example-cochrans-sample-size-calculation" class="slide level2 smaller scrollable">
 <h2>2.2 Code example: Cochran’s sample size calculation</h2>
-<div id="3dff1fea" class="cell" data-execution_count="3">
+<div id="14e8a30d" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="co"># Cochran's Sample Size Calculation</span></span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
 <span id="cb1-3"><a href=""></a><span class="kw">def</span> cochran_sample_size(Z, p, e, N):</span>
-<span id="cb1-4"><a href=""></a>    <span class="co">"""</span></span>
-<span id="cb1-5"><a href=""></a><span class="co">    Calculate the required sample size using Cochran's formula, adjusted for a finite population.</span></span>
-<span id="cb1-6"><a href=""></a></span>
-<span id="cb1-7"><a href=""></a><span class="co">    Parameters:</span></span>
-<span id="cb1-8"><a href=""></a><span class="co">        Z (float): Z-value (e.g., 1.96 for 95% confidence level)</span></span>
-<span id="cb1-9"><a href=""></a><span class="co">Z = stats.norm.ppf(0.975)   # Z-score for the upper tail of a two-tailed 95% confidence interval (1.96 for 95% confidence)</span></span>
-<span id="cb1-10"><a href=""></a><span class="co">        e (float): Margin of error (e.g., 0.05 for 5%)</span></span>
-<span id="cb1-11"><a href=""></a><span class="co">        N (int): Population size</span></span>
-<span id="cb1-12"><a href=""></a></span>
-<span id="cb1-13"><a href=""></a><span class="co">    Returns:</span></span>
-<span id="cb1-14"><a href=""></a><span class="co">        int: Adjusted sample size for the finite population</span></span>
-<span id="cb1-15"><a href=""></a><span class="co">    """</span></span>
-<span id="cb1-16"><a href=""></a>    n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-17"><a href=""></a>    n <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
-<span id="cb1-18"><a href=""></a>    <span class="cf">return</span> <span class="bu">int</span>(n)</span>
-<span id="cb1-19"><a href=""></a></span>
-<span id="cb1-20"><a href=""></a><span class="co"># Parameters</span></span>
-<span id="cb1-21"><a href=""></a>Z <span class="op">=</span> stats.norm.ppf(<span class="fl">0.975</span>)   <span class="co"># Calculate the critical z-value for a 95% confidence level in a standard normal distribution</span></span>
-<span id="cb1-22"><a href=""></a>p <span class="op">=</span> <span class="fl">0.5</span>                     <span class="co"># Estimated proportion (use 0.5 for maximum variability, sort of like worst-case scenario)</span></span>
-<span id="cb1-23"><a href=""></a>e <span class="op">=</span> <span class="fl">0.05</span>                    <span class="co"># Margin of error (precision level, more precision requires larger sample size)</span></span>
-<span id="cb1-24"><a href=""></a>N <span class="op">=</span> <span class="dv">25000</span>                   <span class="co"># Finite population size (in this example, student population size)</span></span>
-<span id="cb1-25"><a href=""></a></span>
-<span id="cb1-26"><a href=""></a><span class="co"># Calculate sample size</span></span>
-<span id="cb1-27"><a href=""></a></span>
-<span id="cb1-28"><a href=""></a><span class="co"># Calculate n0 and adjusted sample size for finite population</span></span>
-<span id="cb1-29"><a href=""></a>n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-30"><a href=""></a>sample_size <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
-<span id="cb1-31"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Ideal sample size (n0): </span><span class="sc">{</span><span class="bu">round</span>(n0)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-32"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Adjusted sample size for finite population: </span><span class="sc">{</span><span class="bu">int</span>(sample_size)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href=""></a>    n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-5"><a href=""></a>    n <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
+<span id="cb1-6"><a href=""></a>    <span class="cf">return</span> <span class="bu">int</span>(n)</span>
+<span id="cb1-7"><a href=""></a></span>
+<span id="cb1-8"><a href=""></a><span class="co"># Parameters</span></span>
+<span id="cb1-9"><a href=""></a>Z <span class="op">=</span> stats.norm.ppf(<span class="fl">0.975</span>)   <span class="co"># Calculate the critical z-value for a 95% confidence level in a standard normal distribution</span></span>
+<span id="cb1-10"><a href=""></a>p <span class="op">=</span> <span class="fl">0.5</span>                     <span class="co"># Estimated proportion (use 0.5 for maximum variability, sort of like worst-case scenario)</span></span>
+<span id="cb1-11"><a href=""></a>e <span class="op">=</span> <span class="fl">0.05</span>                    <span class="co"># Margin of error (precision level, more precision requires larger sample size)</span></span>
+<span id="cb1-12"><a href=""></a>N <span class="op">=</span> <span class="dv">25000</span>                   <span class="co"># Finite population size (in this example, student population size)</span></span>
+<span id="cb1-13"><a href=""></a></span>
+<span id="cb1-14"><a href=""></a><span class="co"># Calculate sample size</span></span>
+<span id="cb1-15"><a href=""></a></span>
+<span id="cb1-16"><a href=""></a><span class="co"># Calculate n0 and adjusted sample size for finite population</span></span>
+<span id="cb1-17"><a href=""></a>n0 <span class="op">=</span> (Z<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">/</span> (e<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-18"><a href=""></a>sample_size <span class="op">=</span> n0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> ((n0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> N))</span>
+<span id="cb1-19"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Ideal sample size (n0): </span><span class="sc">{</span><span class="bu">round</span>(n0)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-20"><a href=""></a><span class="bu">print</span>(<span class="ss">f"Adjusted sample size for finite population: </span><span class="sc">{</span><span class="bu">int</span>(sample_size)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Ideal sample size (n0): 384
@@ -535,103 +526,17 @@ Adjusted sample size for finite population: 378</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Example 1: By increments of 2 or 10</strong></p>
-<div id="5469277d" class="cell" data-execution_count="4">
+<div id="308c898a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># Recode Age to Age Group</span></span>
-<span id="cb3-2"><a href=""></a>population_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> pd.cut(population_data[<span class="st">'Age'</span>], </span>
-<span id="cb3-3"><a href=""></a>                                       bins<span class="op">=</span>[<span class="dv">16</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">29</span>, <span class="dv">31</span>, <span class="dv">41</span>, <span class="dv">51</span>, <span class="dv">61</span>, <span class="dv">81</span>],</span>
-<span id="cb3-4"><a href=""></a>                                       labels<span class="op">=</span>[<span class="st">'16-18'</span>, <span class="st">'19-20'</span>, <span class="st">'21-22'</span>, <span class="st">'23-24'</span>, <span class="st">'25-26'</span>, <span class="st">'27-28'</span>, <span class="st">'29-30'</span>, <span class="st">'31-40'</span>, <span class="st">'41-50'</span>, <span class="st">'51-60'</span>, <span class="st">'61-80'</span>],</span>
-<span id="cb3-5"><a href=""></a>                                   right<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb3-6"><a href=""></a>population_data[[<span class="st">'Age'</span>, <span class="st">'Age_Group'</span>]].head(<span class="dv">10</span>)</span>
-<span id="cb3-7"><a href=""></a></span>
-<span id="cb3-8"><a href=""></a><span class="co"># Age group distribution</span></span>
-<span id="cb3-9"><a href=""></a>population_data[<span class="st">'Age_Group'</span>].value_counts().sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># Binding age groups by increments of 2 years for younger ages and 10 years for older ages</span></span>
+<span id="cb3-2"><a href=""></a>population_data[<span class="st">'Age_Group_1'</span>] <span class="op">=</span> pd.cut(population_data[<span class="st">'Age'</span>], </span>
+<span id="cb3-3"><a href=""></a>                                       bins<span class="op">=</span>[<span class="dv">17</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">29</span>, <span class="dv">31</span>, <span class="dv">41</span>, <span class="dv">50</span>],</span>
+<span id="cb3-4"><a href=""></a>                                       labels<span class="op">=</span>[<span class="st">'17-18'</span>, <span class="st">'19-20'</span>, <span class="st">'21-22'</span>, <span class="st">'23-24'</span>, <span class="st">'25-26'</span>, <span class="st">'27-28'</span>, <span class="st">'29-30'</span>, <span class="st">'31-40'</span>, <span class="st">'41-50'</span>], right<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-5"><a href=""></a><span class="co"># View the first 3 records to confirm the new Age_Group variable</span></span>
+<span id="cb3-6"><a href=""></a>population_data[[<span class="st">'Age'</span>, <span class="st">'Age_Group_1'</span>]].head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>Age_Group
-16-18    10123
-19-20     8896
-21-22     4222
-23-24      506
-25-26      329
-27-28      277
-29-30      235
-31-40      400
-41-50       12
-51-60        0
-61-80        0
-Name: count, dtype: int64</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<p><strong>Example 2: By meaningful groups</strong></p>
-<div id="f0d6b3fc" class="cell" data-execution_count="5">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># Ensure Age_Group is categorical dtype</span></span>
-<span id="cb5-2"><a href=""></a><span class="cf">if</span> <span class="kw">not</span> pd.api.types.is_categorical_dtype(population_data[<span class="st">'Age_Group'</span>]):</span>
-<span id="cb5-3"><a href=""></a>    population_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> population_data[<span class="st">'Age_Group'</span>].astype(<span class="st">'category'</span>)</span>
-<span id="cb5-4"><a href=""></a></span>
-<span id="cb5-5"><a href=""></a><span class="co"># Remove unused categories and add any missing ones to avoid errors</span></span>
-<span id="cb5-6"><a href=""></a>population_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> population_data[<span class="st">'Age_Group'</span>].cat.remove_unused_categories()</span>
-<span id="cb5-7"><a href=""></a>new_categories <span class="op">=</span> {</span>
-<span id="cb5-8"><a href=""></a>    <span class="st">'23-24'</span>: <span class="st">'23-30'</span>,</span>
-<span id="cb5-9"><a href=""></a>    <span class="st">'25-26'</span>: <span class="st">'23-30'</span>,</span>
-<span id="cb5-10"><a href=""></a>    <span class="st">'27-28'</span>: <span class="st">'23-30'</span>,</span>
-<span id="cb5-11"><a href=""></a>    <span class="st">'29-30'</span>: <span class="st">'23-30'</span>,</span>
-<span id="cb5-12"><a href=""></a>    <span class="st">'31-40'</span>: <span class="st">'31+'</span>,</span>
-<span id="cb5-13"><a href=""></a>    <span class="st">'41-50'</span>: <span class="st">'31+'</span>,</span>
-<span id="cb5-14"><a href=""></a>    <span class="st">'51-60'</span>: <span class="st">'31+'</span>,</span>
-<span id="cb5-15"><a href=""></a>    <span class="st">'61-80'</span>: <span class="st">'31+'</span></span>
-<span id="cb5-16"><a href=""></a>}</span>
-<span id="cb5-17"><a href=""></a>population_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> population_data[<span class="st">'Age_Group'</span>].replace(new_categories)</span>
-<span id="cb5-18"><a href=""></a>population_data[<span class="st">'Age_Group'</span>].value_counts().sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>Age_Group
-16-18    10123
-19-20     8896
-21-22     4222
-23-30     1347
-31+        412
-Name: count, dtype: int64</code></pre>
-</div>
-</div>
-</div></div>
-<p>In the first example, any groups beyond the age of 40 is really small, and the population size for age 23 or above is much smaller by proportion to the younger age groups. The second example levels the age group more appropriately and has a decent count at each level.</p>
-<p>Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.</p>
-</section>
-<section id="step-3-select-random-samples-by-each-stratum-by-the-calculated-proportions" class="slide level2 smaller scrollable">
-<h2>Step 3: Select random samples by each stratum by the calculated proportions</h2>
-<p>The strata (subgroups) are determined by the following categories:</p>
-<ul>
-<li><p>Gender (Female or Male)</p></li>
-<li><p>Race (Asian, Black or African American, White, Two or more races, Other)</p></li>
-<li><p>Age Group (16-18, 19-20, 21-22, 23-30, 31+)</p></li>
-</ul>
-<p>Note. You can review the jupyter notebook in the GitHub Repo that shows the iteration of determine the proportion of each stratum.</p>
-<div class="{notes}">
-<p>Due to time constraints, we will not go through the entire iterative process of defining strata and calculating proportions in detail. However, I encourage you to explore the Jupyter notebook available in the GitHub repository linked at the end of this presentation. The notebook provides a comprehensive walkthrough of how to iteratively refine strata definitions and calculate their proportions within the population. For now, we will proceed with the final strata definitions and their corresponding proportions to demonstrate the sampling process.</p>
-</div>
-</section>
-<section id="code-example-calculate-proportions-and-apply-it-to-select-stratum" class="slide level2 smaller scrollable">
-<h2>3.1 Code example: Calculate proportions and apply it to select stratum</h2>
-<div id="104f0291" class="cell" data-execution_count="6">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="co"># Calculate proportions for each stratum</span></span>
-<span id="cb7-2"><a href=""></a>strata_counts <span class="op">=</span> population_data.groupby([<span class="st">'Gender'</span>, <span class="st">'Race'</span>, <span class="st">'Age_Group'</span>]).size()</span>
-<span id="cb7-3"><a href=""></a>strata_proportions <span class="op">=</span> strata_counts <span class="op">/</span> <span class="bu">len</span>(population_data)</span>
-<span id="cb7-4"><a href=""></a>strata_proportions <span class="op">=</span> strata_proportions.reset_index(name<span class="op">=</span><span class="st">'Proportion'</span>)</span>
-<span id="cb7-5"><a href=""></a>strata_proportions.head()</span>
-<span id="cb7-6"><a href=""></a></span>
-<span id="cb7-7"><a href=""></a><span class="co"># Sample size for each stratum</span></span>
-<span id="cb7-8"><a href=""></a>total_sample_size <span class="op">=</span> <span class="dv">378</span>  <span class="co"># From Cochran's calculation</span></span>
-<span id="cb7-9"><a href=""></a>strata_proportions[<span class="st">'Sample_Size'</span>] <span class="op">=</span> (strata_proportions[<span class="st">'Proportion'</span>] <span class="op">*</span> total_sample_size).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb7-10"><a href=""></a>strata_proportions.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -651,53 +556,25 @@ Name: count, dtype: int64</code></pre>
 <thead>
 <tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Gender</th>
-<th data-quarto-table-cell-role="th">Race</th>
-<th data-quarto-table-cell-role="th">Age_Group</th>
-<th data-quarto-table-cell-role="th">Proportion</th>
-<th data-quarto-table-cell-role="th">Sample_Size</th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Age_Group_1</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>16-18</td>
-<td>0.00616</td>
-<td>2</td>
+<td>18</td>
+<td>17-18</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>19-20</td>
-<td>0.00584</td>
-<td>2</td>
+<td>40</td>
+<td>31-40</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>21-22</td>
-<td>0.00368</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>23-30</td>
-<td>0.00072</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>31+</td>
-<td>0.00032</td>
-<td>0</td>
+<td>19</td>
+<td>19-20</td>
 </tr>
 </tbody>
 </table>
@@ -705,39 +582,174 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<aside class="notes">
-<p>In this code snippet, we first calculate the counts of each stratum by grouping the population data based on the defined categories: Gender, Race, and Age Group. We then compute the proportions of each stratum relative to the total population size. This gives us a clear understanding of how each subgroup is represented within the overall population. Next, we determine the sample size for each stratum by multiplying its proportion by the total sample size we calculated earlier using Cochran’s formula. The resulting sample sizes are rounded to the nearest integer to ensure we have whole numbers of participants for each stratum. This step is crucial for ensuring that our sample accurately reflects the population structure.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</div><div class="column" style="width:50%;">
+<p><strong>Example 2: By meaningful groups</strong></p>
+<div id="b937efdf" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="co"># Re-code Age by meaningful groups, such as typical college age, graduate age, and then beyond.</span></span>
+<span id="cb4-2"><a href=""></a></span>
+<span id="cb4-3"><a href=""></a><span class="co"># We will keep the first three groups like the previous example, but then group all older ages into one group, as 31 and above, ' 31+</span></span>
+<span id="cb4-4"><a href=""></a></span>
+<span id="cb4-5"><a href=""></a>population_data[<span class="st">'Age_Group_2'</span>] <span class="op">=</span> pd.cut(population_data[<span class="st">'Age'</span>], </span>
+<span id="cb4-6"><a href=""></a>                                       bins<span class="op">=</span>[<span class="dv">17</span>, <span class="dv">19</span>, <span class="dv">21</span>, <span class="dv">23</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">44</span>],</span>
+<span id="cb4-7"><a href=""></a>                                       labels<span class="op">=</span>[<span class="st">'17-18'</span>, <span class="st">'19-20'</span>, <span class="st">'21-22'</span>, <span class="st">'23-25'</span>, <span class="st">'26-30'</span>, <span class="st">'31+'</span>],</span>
+<span id="cb4-8"><a href=""></a>                                   right<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-9"><a href=""></a><span class="co"># View the last 5 records to confirm the new Age_Group variable</span></span>
+<span id="cb4-10"><a href=""></a>population_data[[<span class="st">'Age'</span>, <span class="st">'Age_Group_2'</span>]].tail(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Age</th>
+<th data-quarto-table-cell-role="th">Age_Group_2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">24995</th>
+<td>21</td>
+<td>21-22</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">24996</th>
+<td>23</td>
+<td>23-25</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">24997</th>
+<td>20</td>
+<td>19-20</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">24998</th>
+<td>19</td>
+<td>19-20</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">24999</th>
+<td>19</td>
+<td>19-20</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div></div>
+<p>In the first example, any groups beyond the age of 40 is really small, and the population size for age 23 or above is much smaller by proportion to the younger age groups. The second example levels the age group more appropriately and has a decent count at each level.</p>
+<p>Remember we still need to use this information to calculate proportion and so in practice, you may repeat this steps and the sampling part until you are able to draw a proper set of subgroups as a final complete sample.</p>
+</section>
+<section id="step-3-select-random-samples-by-each-stratum-by-the-calculated-proportions" class="slide level2 smaller scrollable">
+<h2>Step 3: Select random samples by each stratum by the calculated proportions</h2>
+<p>The strata (subgroups) are determined by the following categories:</p>
+<ul>
+<li><p>Gender (Female or Male)</p></li>
+<li><p>Race (Asian, Black or African American, White, Two or more races, Other)</p></li>
+<li><p>Age Group (16-18, 19-20, 21-22, 23-30, 31+)</p></li>
+</ul>
+<div id="4a8e2bce" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># Proportion of Gender in the Sample Selection Data</span></span>
+<span id="cb5-2"><a href=""></a><span class="bu">print</span>(sample_selection_data[<span class="st">'Gender_m'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">2</span>))</span>
+<span id="cb5-3"><a href=""></a><span class="bu">print</span>()</span>
+<span id="cb5-4"><a href=""></a><span class="co"># Proportion of Race in the Sample Selection Data</span></span>
+<span id="cb5-5"><a href=""></a><span class="bu">print</span>(sample_selection_data[<span class="st">'Race_m'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">2</span>))</span>
+<span id="cb5-6"><a href=""></a><span class="bu">print</span>()</span>
+<span id="cb5-7"><a href=""></a><span class="co"># Proportion of Age Group in the Sample Selection Data</span></span>
+<span id="cb5-8"><a href=""></a><span class="bu">print</span>(sample_selection_data[<span class="st">'Age_Group_2'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Gender_m
+Female    0.57
+Male      0.43
+Name: proportion, dtype: float64
+
+Race_m
+White                        0.57
+Black or African American    0.19
+Asian                        0.10
+Two or more races            0.07
+Other                        0.06
+Name: proportion, dtype: float64
+
+Age_Group_2
+17-18    0.40
+19-20    0.36
+21-22    0.17
+26-30    0.03
+31+      0.02
+23-25    0.02
+Name: proportion, dtype: float64</code></pre>
+</div>
+</div>
+<p>Note. You can review the jupyter notebook in the GitHub Repo that shows the iteration of determine the proportion of each stratum.</p>
+<div id="8f22a754" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-stdout">
+<pre><code>Ideal sample size (n0) for 95% confidence level with 3% margin of error: 1067
+Adjusted sample size of finite population for 95% confidence level with 3% margin of error: 1023</code></pre>
+</div>
+</div>
+<div class="{notes}">
+<p>Due to time constraints, we will not go through the entire iterative process of defining strata and calculating proportions in detail. However, I encourage you to explore the Jupyter notebook available in the GitHub repository linked at the end of this presentation. The notebook provides a comprehensive walkthrough of how to iteratively refine strata definitions and calculate their proportions within the population. For now, we will proceed with the final strata definitions and their corresponding proportions to demonstrate the sampling process.</p>
+</div>
 </section>
 <section id="step-4.-apply-random-selection-by-each-strata-and-form-the-completed-sample-dataset" class="slide level2 smaller scrollable">
 <h2>Step 4. Apply random selection by each strata and form the completed sample dataset</h2>
-<div id="28a20b89" class="cell" data-execution_count="7">
+<div id="808fc145" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="co"># Randomly select samples from each stratum</span></span>
-<span id="cb8-2"><a href=""></a>sampled_data <span class="op">=</span> pd.DataFrame()</span>
-<span id="cb8-3"><a href=""></a><span class="cf">for</span> _, row <span class="kw">in</span> strata_proportions.iterrows():</span>
-<span id="cb8-4"><a href=""></a>    stratum <span class="op">=</span> population_data[</span>
-<span id="cb8-5"><a href=""></a>        (population_data[<span class="st">'Gender'</span>] <span class="op">==</span> row[<span class="st">'Gender'</span>]) <span class="op">&amp;</span></span>
-<span id="cb8-6"><a href=""></a>        (population_data[<span class="st">'Race'</span>] <span class="op">==</span> row[<span class="st">'Race'</span>]) <span class="op">&amp;</span></span>
-<span id="cb8-7"><a href=""></a>        (population_data[<span class="st">'Age_Group'</span>] <span class="op">==</span> row[<span class="st">'Age_Group'</span>])</span>
-<span id="cb8-8"><a href=""></a>    ]</span>
-<span id="cb8-9"><a href=""></a>    sampled_stratum <span class="op">=</span> stratum.sample(n<span class="op">=</span>row[<span class="st">'Sample_Size'</span>], replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-10"><a href=""></a>    sampled_data <span class="op">=</span> pd.concat([sampled_data, sampled_stratum])</span>
-<span id="cb8-11"><a href=""></a>sampled_data.reset_index(drop<span class="op">=</span><span class="va">True</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-12"><a href=""></a>sampled_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="co"># Initialize an empty list to hold sampled dataframes</span></span>
+<span id="cb8-2"><a href=""></a>sampled_groups <span class="op">=</span> []</span>
+<span id="cb8-3"><a href=""></a><span class="cf">for</span> i, row <span class="kw">in</span> stratum_sizes_three_moe.iterrows():</span>
+<span id="cb8-4"><a href=""></a>    stratum_filter <span class="op">=</span> (</span>
+<span id="cb8-5"><a href=""></a>        (sample_selection_data[<span class="st">'Gender_m'</span>] <span class="op">==</span> row[<span class="st">'Gender_m'</span>]) <span class="op">&amp;</span></span>
+<span id="cb8-6"><a href=""></a>        (sample_selection_data[<span class="st">'Race_m'</span>] <span class="op">==</span> row[<span class="st">'Race_m'</span>]) <span class="op">&amp;</span></span>
+<span id="cb8-7"><a href=""></a>        (sample_selection_data[<span class="st">'Age_Group_2'</span>] <span class="op">==</span> row[<span class="st">'Age_Group_2'</span>])</span>
+<span id="cb8-8"><a href=""></a>    )</span>
+<span id="cb8-9"><a href=""></a>    stratum_population <span class="op">=</span> sample_selection_data[stratum_filter]</span>
+<span id="cb8-10"><a href=""></a>    <span class="co"># Use the sample size from the current row</span></span>
+<span id="cb8-11"><a href=""></a>    stratum_sample_size <span class="op">=</span> <span class="bu">int</span>(row[<span class="st">'Sample_Size'</span>])</span>
+<span id="cb8-12"><a href=""></a></span>
+<span id="cb8-13"><a href=""></a>    <span class="co"># Ensure we don't sample from empty strata or more than available</span></span>
+<span id="cb8-14"><a href=""></a>    n <span class="op">=</span> <span class="bu">min</span>(stratum_sample_size, <span class="bu">len</span>(stratum_population))</span>
+<span id="cb8-15"><a href=""></a>    <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb8-16"><a href=""></a>        stratum_sample <span class="op">=</span> stratum_population.sample(n<span class="op">=</span>n, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-17"><a href=""></a>        sampled_groups.append(stratum_sample)</span>
+<span id="cb8-18"><a href=""></a></span>
+<span id="cb8-19"><a href=""></a><span class="co"># Combine all sampled dataframes into a single dataframe (guard against empty list)</span></span>
+<span id="cb8-20"><a href=""></a><span class="cf">if</span> sampled_groups:</span>
+<span id="cb8-21"><a href=""></a>    sampled_dataset <span class="op">=</span> pd.concat(sampled_groups).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-22"><a href=""></a><span class="cf">else</span>:</span>
+<span id="cb8-23"><a href=""></a>    sampled_dataset <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>sample_selection_data.columns)</span>
+<span id="cb8-24"><a href=""></a></span>
+<span id="cb8-25"><a href=""></a><span class="co"># Create an alias expected by downstream cells and align column naming</span></span>
+<span id="cb8-26"><a href=""></a>sampled_data <span class="op">=</span> sampled_dataset.copy()</span>
+<span id="cb8-27"><a href=""></a><span class="cf">if</span> <span class="st">'Age_Group'</span> <span class="kw">not</span> <span class="kw">in</span> sampled_data.columns <span class="kw">and</span> <span class="st">'Age_Group_2'</span> <span class="kw">in</span> sampled_data.columns:</span>
+<span id="cb8-28"><a href=""></a>    sampled_data[<span class="st">'Age_Group'</span>] <span class="op">=</span> sampled_data[<span class="st">'Age_Group_2'</span>]</span>
+<span id="cb8-29"><a href=""></a></span>
+<span id="cb8-30"><a href=""></a>sampled_dataset.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -759,69 +771,57 @@ Name: count, dtype: int64</code></pre>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">StudentID</th>
 <th data-quarto-table-cell-role="th">Gender</th>
-<th data-quarto-table-cell-role="th">Age</th>
 <th data-quarto-table-cell-role="th">Race</th>
-<th data-quarto-table-cell-role="th">Ethnicity</th>
-<th data-quarto-table-cell-role="th">StudentType</th>
-<th data-quarto-table-cell-role="th">OverallGPA</th>
-<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Age_Group_2</th>
+<th data-quarto-table-cell-role="th">Gender_m</th>
+<th data-quarto-table-cell-role="th">Race_m</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>SID001203</td>
+<td>SID011272</td>
 <td>Female</td>
-<td>18</td>
-<td>American Indian or Alaska Native</td>
-<td>Not Hispanic or Latino</td>
-<td>Freshman</td>
-<td>2.02</td>
-<td>16-18</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>Female</td>
+<td>Asian</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>SID015074</td>
+<td>SID014118</td>
 <td>Female</td>
-<td>17</td>
-<td>American Indian or Alaska Native</td>
-<td>Not Hispanic or Latino</td>
-<td>Freshman</td>
-<td>2.59</td>
-<td>16-18</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>Female</td>
+<td>Asian</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>SID008213</td>
+<td>SID019647</td>
 <td>Female</td>
-<td>19</td>
-<td>American Indian or Alaska Native</td>
-<td>Not Hispanic or Latino</td>
-<td>Sophomore</td>
-<td>3.20</td>
-<td>19-20</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>Female</td>
+<td>Asian</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>SID017778</td>
+<td>SID014533</td>
 <td>Female</td>
-<td>20</td>
-<td>American Indian or Alaska Native</td>
-<td>Not Hispanic or Latino</td>
-<td>Senior</td>
-<td>3.30</td>
-<td>19-20</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>Female</td>
+<td>Asian</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>SID000902</td>
+<td>SID010688</td>
 <td>Female</td>
-<td>21</td>
-<td>American Indian or Alaska Native</td>
-<td>Not Hispanic or Latino</td>
-<td>Senior</td>
-<td>3.84</td>
-<td>21-22</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>Female</td>
+<td>Asian</td>
 </tr>
 </tbody>
 </table>
@@ -848,8 +848,8 @@ Name: count, dtype: int64</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Sampled Dataset (n = 378)</strong></p>
-<div id="90387a2c" class="cell" data-execution_count="8">
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div id="cf3c7549" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -869,9 +869,10 @@ Name: count, dtype: int64</code></pre>
 <thead>
 <tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Gender</th>
-<th data-quarto-table-cell-role="th">Race</th>
-<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Gender_m</th>
+<th data-quarto-table-cell-role="th">Race_m</th>
+<th data-quarto-table-cell-role="th">Age_Group_2</th>
+<th data-quarto-table-cell-role="th">Count</th>
 <th data-quarto-table-cell-role="th">Proportion</th>
 </tr>
 </thead>
@@ -879,37 +880,82 @@ Name: count, dtype: int64</code></pre>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>16-18</td>
-<td>0.005333</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>25</td>
+<td>0.024343</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
+<td>Asian</td>
 <td>19-20</td>
-<td>0.005333</td>
+<td>21</td>
+<td>0.020448</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
+<td>Asian</td>
 <td>21-22</td>
-<td>0.002667</td>
+<td>10</td>
+<td>0.009737</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>Female</td>
 <td>Asian</td>
-<td>16-18</td>
-<td>0.024000</td>
+<td>23-25</td>
+<td>1</td>
+<td>0.000974</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>Female</td>
 <td>Asian</td>
+<td>26-30</td>
+<td>2</td>
+<td>0.001947</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Female</td>
+<td>Asian</td>
+<td>31+</td>
+<td>1</td>
+<td>0.000974</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>17-18</td>
+<td>45</td>
+<td>0.043817</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Female</td>
+<td>Black or African American</td>
 <td>19-20</td>
-<td>0.021333</td>
+<td>39</td>
+<td>0.037975</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>21-22</td>
+<td>20</td>
+<td>0.019474</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>23-25</td>
+<td>3</td>
+<td>0.002921</td>
 </tr>
 </tbody>
 </table>
@@ -919,8 +965,8 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div><div class="column" style="width:50%;">
 <p><strong>Population Dataset (N = 25,000)</strong></p>
-<div id="c2d914eb" class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div id="2189ec5a" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -940,9 +986,10 @@ Name: count, dtype: int64</code></pre>
 <thead>
 <tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Gender</th>
-<th data-quarto-table-cell-role="th">Race</th>
-<th data-quarto-table-cell-role="th">Age_Group</th>
+<th data-quarto-table-cell-role="th">Gender_m</th>
+<th data-quarto-table-cell-role="th">Race_m</th>
+<th data-quarto-table-cell-role="th">Age_Group_2</th>
+<th data-quarto-table-cell-role="th">Count</th>
 <th data-quarto-table-cell-role="th">Proportion</th>
 </tr>
 </thead>
@@ -950,37 +997,82 @@ Name: count, dtype: int64</code></pre>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>16-18</td>
-<td>0.00616</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>582</td>
+<td>0.024247</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
+<td>Asian</td>
 <td>19-20</td>
-<td>0.00584</td>
+<td>501</td>
+<td>0.020872</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
+<td>Asian</td>
 <td>21-22</td>
-<td>0.00368</td>
+<td>229</td>
+<td>0.009540</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>23-30</td>
-<td>0.00072</td>
+<td>Asian</td>
+<td>23-25</td>
+<td>21</td>
+<td>0.000875</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
+<td>Asian</td>
+<td>26-30</td>
+<td>50</td>
+<td>0.002083</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Female</td>
+<td>Asian</td>
 <td>31+</td>
-<td>0.00032</td>
+<td>31</td>
+<td>0.001292</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>17-18</td>
+<td>1066</td>
+<td>0.044411</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>19-20</td>
+<td>912</td>
+<td>0.037995</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>21-22</td>
+<td>462</td>
+<td>0.019248</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Female</td>
+<td>Black or African American</td>
+<td>23-25</td>
+<td>75</td>
+<td>0.003125</td>
 </tr>
 </tbody>
 </table>
@@ -1003,24 +1095,32 @@ Name: count, dtype: int64</code></pre>
           display:block!important;
       }</style></aside>
 </section></section>
-<section id="weights-calculation" class="title-slide slide level1 center">
-<h1>Weights Calculation</h1>
+<section>
+<section id="weight-calculation-for-survey-analysis" class="title-slide slide level1 center">
+<h1>Weight Calculation for Survey Analysis</h1>
 <p>The use of weights is essential when the sample proportions differ from the population proportions. This adjustment helps to correct for any over- or under-representation of certain groups in the sample, ensuring that the analysis reflects the true population structure.</p>
 <p>Depending on the number of stratification variables and their levels, weights can be calculated for each stratum or for combined categories. The formular for calculating weights for combined categories is similar to calculating weights for individual strata, but it takes into account the joint distribution of the combined categories.</p>
 </section>
-
-<section id="weights-calculation-formula-and-code-example" class="title-slide slide level1 smaller scrollable center">
-<h1>Weights Calculation Formula and Code Example</h1>
-<p>Weight = (Population Proportion) / (Sample Proportion)</p>
-<div id="e88eedc3" class="cell" data-execution_count="10">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a><span class="co"># Calculate population proportions for weight calculation</span></span>
-<span id="cb9-2"><a href=""></a>population_counts <span class="op">=</span> population_data.groupby([<span class="st">'Gender'</span>, <span class="st">'Race'</span>, <span class="st">'Age_Group'</span>]).size().reset_index(name<span class="op">=</span><span class="st">'Count'</span>)</span>
-<span id="cb9-3"><a href=""></a>population_counts[<span class="st">'Proportion'</span>] <span class="op">=</span> population_counts[<span class="st">'Count'</span>] <span class="op">/</span> population_counts[<span class="st">'Count'</span>].<span class="bu">sum</span>()</span>
-<span id="cb9-4"><a href=""></a>population_counts.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<section id="weights-calculation-formula" class="slide level2 smaller scrollable">
+<h2>Weights Calculation Formula</h2>
+<p>In general, the formula for calculating weight for each category is:</p>
+<p><span class="math display">\[
+\text{Weight} = \frac{\text{Proportion from Sample Group}}{\text{Proportion from Respondent Group}}
+\]</span></p>
+<p>Because we used a combination of variables in the strata, each participant should be assigned an overall weight:</p>
+<p><span class="math display">\[
+\text{Overall Weight for Each Participant} = \text{Race Weight} \times \text{Gender Weight} \times \text{Age Group Weight}
+\]</span></p>
+<p><span class="math display">\[
+W_{\text{overall}} = W_{\text{race}} \times W_{\text{gender}} \times W_{\text{age}}
+\]</span></p>
+<p>Each weight is determined by dividing the sample groups’ proportion by the respondent groups’ proportion for each category, and then multiplying these weights together to get the overall weight for each participant.</p>
+<p>The overall weight assigned to each respondent is then used to calculate the individual item score on the survey. The unadjusted means and the weighted mean scores are often compared as well to see if there are any significant differences.</p>
+</section>
+<section id="code-example-of-weight-calculation" class="slide level2">
+<h2>Code Example of Weight Calculation</h2>
+<div id="230743e3" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1040,98 +1140,84 @@ Name: count, dtype: int64</code></pre>
 <thead>
 <tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Gender</th>
-<th data-quarto-table-cell-role="th">Race</th>
-<th data-quarto-table-cell-role="th">Age_Group</th>
-<th data-quarto-table-cell-role="th">Count</th>
-<th data-quarto-table-cell-role="th">Proportion</th>
+<th data-quarto-table-cell-role="th">Q1_Gender</th>
+<th data-quarto-table-cell-role="th">Q2_Race</th>
+<th data-quarto-table-cell-role="th">Q3_AgeGroup</th>
+<th data-quarto-table-cell-role="th">Q4_Traffic_Accidents</th>
+<th data-quarto-table-cell-role="th">Q5_Academic_Performance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>16-18</td>
-<td>154</td>
-<td>0.00616</td>
+<td>Male</td>
+<td>White</td>
+<td>17-18</td>
+<td>4.0</td>
+<td>4.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>19-20</td>
-<td>146</td>
-<td>0.00584</td>
+<td>White</td>
+<td>17-18</td>
+<td>3.0</td>
+<td>3.0</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>21-22</td>
-<td>92</td>
-<td>0.00368</td>
+<td>White</td>
+<td>17-18</td>
+<td>5.0</td>
+<td>5.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>23-30</td>
-<td>18</td>
-<td>0.00072</td>
+<td>Asian</td>
+<td>17-18</td>
+<td>5.0</td>
+<td>5.0</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>Female</td>
-<td>American Indian or Alaska Native</td>
-<td>31+</td>
-<td>8</td>
-<td>0.00032</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
-<td>Female</td>
-<td>Asian</td>
-<td>16-18</td>
-<td>582</td>
-<td>0.02328</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
-<td>Female</td>
-<td>Asian</td>
-<td>19-20</td>
-<td>501</td>
-<td>0.02004</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
-<td>Female</td>
-<td>Asian</td>
-<td>21-22</td>
-<td>229</td>
-<td>0.00916</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">8</th>
-<td>Female</td>
-<td>Asian</td>
-<td>23-30</td>
-<td>75</td>
-<td>0.00300</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">9</th>
-<td>Female</td>
-<td>Asian</td>
-<td>31+</td>
-<td>27</td>
-<td>0.00108</td>
+<td>Black or African American</td>
+<td>17-18</td>
+<td>5.0</td>
+<td>5.0</td>
 </tr>
 </tbody>
 </table>
 
 </div>
+</div>
+</div>
+<p>Examine the respondents data and the proportions of each stratum.</p>
+<div id="6b0e0112" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a><span class="co"># Demographic proportions of the three variables: Gender, Race, and Age Group and create a dictionary by the proportion and round to three decimal places</span></span>
+<span id="cb9-2"><a href=""></a>respondent_proportions <span class="op">=</span> {</span>
+<span id="cb9-3"><a href=""></a>    <span class="st">"Gender_r"</span>: respondents_data[<span class="st">'Q1_Gender'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_dict(),</span>
+<span id="cb9-4"><a href=""></a>    <span class="st">"Race_r"</span>: respondents_data[<span class="st">'Q2_Race'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_dict(),</span>
+<span id="cb9-5"><a href=""></a>    <span class="st">"Age_Group_r"</span>: respondents_data[<span class="st">'Q3_AgeGroup'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>).<span class="bu">round</span>(<span class="dv">3</span>).to_dict()</span>
+<span id="cb9-6"><a href=""></a>}</span>
+<span id="cb9-7"><a href=""></a>respondent_proportions</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>{'Gender_r': {'Female': 0.631, 'Male': 0.369},
+ 'Race_r': {'White': 0.556,
+  'Black or African American': 0.162,
+  'Asian': 0.154,
+  'Two or more races': 0.083,
+  'Other': 0.046},
+ 'Age_Group_r': {'19-20': 0.419,
+  '17-18': 0.261,
+  '21-22': 0.133,
+  '23-25': 0.095,
+  '31+': 0.091}}</code></pre>
 </div>
 </div>
 <aside class="notes">
@@ -1147,8 +1233,7 @@ Name: count, dtype: int64</code></pre>
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-
+</section></section>
 <section>
 <section id="extension-of-stratified-random-sampling" class="title-slide slide level1 center">
 <h1>Extension of Stratified Random Sampling</h1>
@@ -1165,9 +1250,7 @@ Name: count, dtype: int64</code></pre>
 <section id="survey-planning-with-response-rate-consideration" class="slide level2">
 <h2>Survey Planning with Response Rate Consideration</h2>
 <p>Although we designed the sample group of students to survey is within 400, however, we don’t often get all 400 results back. Therefore, adjust invitation count based on <strong>expected response rate</strong> can also be implemented.</p>
-<p>Example: If desired sample size is <strong>2,000</strong> and historical response rate is <strong>10%</strong>, then:<br>
-</p>
-<p>Invitations&nbsp;Required=20000* 10=20,000</p>
+<p>Example: If desired sample size is <strong>2,000</strong> and historical response rate is <strong>10%</strong>, you should increase the sample size by 10% to reach more participants.</p>
 </section></section>
 <section id="github-repo-contact-me" class="title-slide slide level1 center">
 <h1>GitHub Repo &amp; Contact Me</h1>
@@ -1176,6 +1259,7 @@ Name: count, dtype: int64</code></pre>
 <li>Contact Me: <a href="mailto:your-email@example.com">Email</a></li>
 <li>LinkedIn: <a href="https://www.linkedin.com/in/your-profile">LinkedIn Profile</a></li>
 <li>Twitter: <a href="https://twitter.com/your-handle">Twitter Handle</a></li>
+<li>Instagram (food, travel, and cat photos): <a href="https://www.instagram.com/your-profile">Instagram Profile</a></li>
 </ul>
 <p>Thank you for attending my presentation!</p>
 
