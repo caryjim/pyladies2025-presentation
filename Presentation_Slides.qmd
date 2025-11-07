@@ -359,7 +359,7 @@ Stratum are indexed based on the order in the DataFrame.
 
 ::::: columns
 ::: {.column width="50%"}
-**Sampled Dataset (n = 378)**
+**Sampled Dataset (n = 1023)**
 ```{python}
 # Calculate the proportions in the sampled data
 sample_proportions = sampled_dataset.groupby(['Gender_m', 'Race_m', 'Age_Group_2'], observed=True).size().reset_index(name='Count')
