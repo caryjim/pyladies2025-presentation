@@ -102,15 +102,11 @@ In this example, the population is defined as 25,000 college students.
 **Variables in the population dataset:**
 
 ```{python}
-# Hide this code chunk in the presentation
 #| echo: false
 import pandas as pd
 data_folder = './Data Files/'
 population_data = pd.read_csv(data_folder + "synthetic_students.csv")
-```
 
-```{python}
-#| echo: true
 # View the first three rows of the population dataset
 population_data.head(3)
 ```
@@ -612,14 +608,15 @@ respondents_data[['Q4_Traffic_Accidents', 'Q4_with_weights']].describe().round(3
 -   ResearchGate: <https://www.researchgate.net/profile/Cary-Jim>
 -   Instagram (food, travel, and cat photos): @ladybirdcary
 
-:::{notes}
-Abstract: Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate a Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios. 
+# Presentation Details in Conference Program
+**Abstract:**
+Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate a Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios. 
 
-Description: Whether you’re conducting surveys, building predictive models, or working with imbalanced datasets, stratified sampling is a powerful technique for ensuring your data is representative and your insights are reliable. 
+**Description:**
+Whether you’re conducting surveys, building predictive models, or working with imbalanced datasets, stratified sampling is a powerful technique for ensuring your data is representative and your insights are reliable. 
 
 In survey research, particularly with diverse populations like college students, simple random sampling can lead to under-representation of key subgroups. Stratified sampling addresses this by dividing the population into distinct strata (e.g., age groups, majors, demographics) and sampling proportionally from each. This approach reduces sampling bias and improves the reliability of statistical estimates. 
 
 In this presentation, I will demonstrate how to use Python to implement stratified sampling in a student survey at our college. By maintaining proportional representation across age groups, we ensured that our sample reflected the diversity of the student body. I’ll walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and data analysis. 
 
 We’ll also explore how to calculate weighted means when sample proportions differ from population proportions, which is a crucial step in producing unbiased estimates. Code examples and visualizations will be shared via GitHub to support hands-on learning and reproducibility.
-:::
