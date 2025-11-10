@@ -6,8 +6,7 @@ format:
   revealjs:
     theme: simple
     slide-number: true
-    transition: fade
-    
+
 execute:
   echo: true
   warning: false
@@ -17,4 +16,4 @@ website:
   site-url: "https://caryjim.github.io/pyladies2025-presentation/"
   repo-url: "https://github.com/caryjim/pyladies2025-presentation"
   repo-actions: [edit, issue]
-  navbar: false
+  navbar: true
