@@ -1,0 +1,21 @@
+project:
+  type: revealjs
+  output-dir: _site
+
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: fade
+    toc: true
+    toc-depth: 2
+
+execute:
+  echo: true
+  warning: false
+
+website:
+  title: "PyLadies 2025 Presentation"
+  site-url: "https://caryjim.github.io/pyladies2025-presentation/"
+  repo-url: "https://github.com/caryjim/pyladies2025-presentation"
+  repo-actions: [edit, issue]
