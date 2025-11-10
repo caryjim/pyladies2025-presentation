@@ -1,1 +1,0 @@
-Sitemap: https://caryjim.github.io/pyladies2025-presentation/sitemap.xml
