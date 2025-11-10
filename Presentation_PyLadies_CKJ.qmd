@@ -102,7 +102,7 @@ In this example, the population is defined as 25,000 college students.
 **Variables in the population dataset:**
 
 ```{python}
-#| echo: false
+#| echo: true
 import pandas as pd
 data_folder = './Data Files/'
 population_data = pd.read_csv(data_folder + "synthetic_students.csv")
@@ -608,7 +608,7 @@ respondents_data[['Q4_Traffic_Accidents', 'Q4_with_weights']].describe().round(3
 -   ResearchGate: <https://www.researchgate.net/profile/Cary-Jim>
 -   Instagram (food, travel, and cat photos): @ladybirdcary
 
-# Presentation Details in Conference Program
+## Presentation Details in Conference Program {.smaller .scrollable}
 **Abstract:**
 Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate a Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios. 
 
