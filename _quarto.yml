@@ -7,8 +7,7 @@ format:
     theme: simple
     slide-number: true
     transition: fade
-    toc: true
-    toc-depth: 2
+    toc: false
 
 execute:
   echo: true
