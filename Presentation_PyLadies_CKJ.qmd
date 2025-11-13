@@ -27,7 +27,8 @@ jupyter: python3
 
 **Today's presentation** 
 
-Demonstrate how stratified random sampling to identify subgroups - Post-stratification weights are applied to correct unequal representation
+-  Demonstrate how stratified random sampling is used to identify subgroups
+-  Post-stratification weights are applied to correct unequal representation
 
 ## Stratified Sampling: Why and When? 
 
@@ -242,16 +243,24 @@ The strata (subgroups) are determined by the following categories:
 ```{python}
 #| echo: true
 
-# Create a distribution chart for each of the three variables after recoding
 import matplotlib.pyplot as plt
+
+# Create a distribution chart for each of the three variables after recoding
 
 # Proportion of Gender in the Sample Selection Data and add the proportion on top of each bar
 gender_proportions = sample_selection_data['Gender_m'].value_counts(normalize=True).round(2)
 gender_proportions.plot(kind='bar', title='Proportion of Gender')
 plt.xticks(rotation=0)
+
 # Round to 2 decimal places and convert to percentage
 for i, v in enumerate(gender_proportions):
     plt.text(i, v + 0.01, str(round(v * 100, 2)) + '%', ha='center')
+
+# Adjust the y-axis label to give more space for the percentage text
+plt.ylim(0, max(gender_proportions) + 0.1)
+
+plt.xlabel('Gender')
+plt.ylabel('Proportion')
 plt.show()
 ```
 
@@ -259,11 +268,21 @@ plt.show()
 #| echo: true
 # Proportion of Race in the Sample Selection Data
 race_proportions = sample_selection_data['Race_m'].value_counts(normalize=True).round(2)
+
+# Plot the proportions of Race
+plt.figure(figsize=(10, 6))
 race_proportions.plot(kind='bar', title='Proportion of Race')
 plt.xticks(rotation=0)
+
 # Round to 2 decimal places and convert to percentage
 for i, v in enumerate(race_proportions):
     plt.text(i, v + 0.01, str(round(v * 100, 2)) + '%', ha='center')
+
+# Adjust the y-axis label to give more space for the percentage text
+plt.ylim(0, max(gender_proportions) + 0.1)
+
+plt.xlabel('Race')
+plt.ylabel('Proportion')
 plt.show()
 ```
 
@@ -271,10 +290,21 @@ plt.show()
 #| echo: true
 # Proportion of Age Group in the Sample Selection Data
 age_proportions = sample_selection_data['Age_Group_2'].value_counts(normalize=True).round(2)
+
+# Plot the proportions of Age Group
+plt.figure(figsize=(10, 6))
 age_proportions.plot(kind='bar', title='Proportion of Age Group')
 plt.xticks(rotation=0)
+
+# Round to 2 decimal places and convert to percentage
 for i, v in enumerate(age_proportions):
     plt.text(i, v + 0.01, str(round(v * 100, 2)) + '%', ha='center')
+
+# Adjust the y-axis label to give more space for the percentage text
+plt.ylim(0, max(age_proportions) + 0.1)
+
+plt.xlabel('Age Group')
+plt.ylabel('Proportion')
 plt.show()
 ```
 
@@ -607,16 +637,3 @@ respondents_data[['Q4_Traffic_Accidents', 'Q4_with_weights']].describe().round(3
 -   LinkedIn: <https://www.linkedin.com/in/cary-k-jim-40046152>
 -   ResearchGate: <https://www.researchgate.net/profile/Cary-Jim>
 -   Instagram (food, travel, and cat photos): @ladybirdcary
-
-## Presentation Details in Conference Program {.smaller .scrollable}
-**Abstract:**
-Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate a Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios. 
-
-**Description:**
-Whether you’re conducting surveys, building predictive models, or working with imbalanced datasets, stratified sampling is a powerful technique for ensuring your data is representative and your insights are reliable. 
-
-In survey research, particularly with diverse populations like college students, simple random sampling can lead to under-representation of key subgroups. Stratified sampling addresses this by dividing the population into distinct strata (e.g., age groups, majors, demographics) and sampling proportionally from each. This approach reduces sampling bias and improves the reliability of statistical estimates. 
-
-In this presentation, I will demonstrate how to use Python to implement stratified sampling in a student survey at our college. By maintaining proportional representation across age groups, we ensured that our sample reflected the diversity of the student body. I’ll walk through the conceptual foundations of stratified sampling, compare it with simple random sampling, and highlight its advantages in survey research and data analysis. 
-
-We’ll also explore how to calculate weighted means when sample proportions differ from population proportions, which is a crucial step in producing unbiased estimates. Code examples and visualizations will be shared via GitHub to support hands-on learning and reproducibility.
