@@ -452,7 +452,7 @@ Once verified, the sampled dataset can be used for survey distribution.
 
 -   Combined categories (joint distribution considered)
 
--   Note. weights can be a fraction, but are always positive and non-zero.
+Note. weights can be a fraction, but are always positive and non-zero.
 
 **Today's demonstration is similar to individual strata weighting but accounts for joint distribution.**
 
@@ -491,7 +491,7 @@ $$
 # Calculate Weights in Respondents Data
 
 ## Respondents Dataset {.smaller .scrollable}
-Synthetic respondents data based on a survey distributed to the sampled dataset.
+Synthetic respondents data based on a survey distributed to the participants in the sampled dataset.
 
 There are 241 respondents in the survey results.
 
