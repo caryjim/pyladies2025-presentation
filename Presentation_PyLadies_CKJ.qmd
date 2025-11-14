@@ -452,7 +452,7 @@ Once verified, the sampled dataset can be used for survey distribution.
 
 -   Combined categories (joint distribution considered)
 
-Note. weights can be a fraction, but are always positive and non-zero.
+Note. Weights can be a fraction, but are always positive and non-zero.
 
 **Today's demonstration is similar to individual strata weighting but accounts for joint distribution.**
 
