@@ -1,11 +1,13 @@
 # pyladies2025-presentation
 
-This is the presentation for PyLadiesCon in December 5-7, 2025. 
+Stratified Sampling with Python for PyLadiesCon in December 5-7, 2025. 
 
 # Topic: Stratified Sampling in Survey Research
 [Presentation URL](https://caryjim.github.io/pyladies2025-presentation/Presentation_PyLadies_CKJ.html#/title-slide)
 
-## Presentation Details in Conference Program
+[Full notebook with explanation](https://github.com/caryjim/pyladies2025-presentation/tree/main/Notebook)
+
+## Presentation Info in Conference Program
 
 **Abstract:**
 Stratified sampling helps ensure representative data subsets, especially when working with imbalanced groups. In this talk, we’ll explore its use in survey analysis, demonstrate a Python-based implementation, and share best practices for improving data reliability and reducing bias. Attendees will gain a clear understanding of when and how to use stratified sampling effectively in real-world scenarios. 
